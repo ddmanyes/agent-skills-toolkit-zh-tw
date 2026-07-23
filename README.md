@@ -2,7 +2,7 @@
 
 歡迎使用！本專案收錄了超過 25 個經由開發者社群優化的 **Claude Code (Antigravity)** 高階技能。
 
-我們已經將這些技能翻譯為繁體中文，並針對「生物資訊分析」、「UI/UX 設計」與「自動化開發」進行了邏輯強化。
+我們已經將這些技能翻譯為繁體中文，並針對「資訊分析」、「UI/UX 設計」與「自動化開發」進行了邏輯強化。
 
 ---
 
@@ -34,21 +34,37 @@
 
 ---
 
+## 🗺️ 新專案怎麼串起來用
+
+不知道從哪個 skill 開始？看 **[新專案工作流.md](./新專案工作流.md)**——一張流程圖 + 對照表，說明開新專案時各階段該呼叫哪個 skill。
+
+---
+
 ## 📂 技能包內容清單
 
 ### 核心開發 (Active)
-- **SP 系列**：腦力激盪、極細計畫、自動執行、子代理調度、測試除錯等。
+
+- **SP 系列**：腦力激盪（已升級為 grilling 決策樹拷問）、極細計畫、自動執行、子代理調度、測試除錯等。
 - **架構工具**：專案建築師 v3.0、循環開發 (Ralph)、檔案計畫管理 (Manus 風格)。
-- **代碼品質**：資深代碼審查、代碼簡化專家。
+- **代碼品質**：資深代碼審查（雙軸 Standards/Spec 並行 + Fowler code smell 基線）、代碼簡化專家。
+
+### 設計方法論 (Active，源自 mattpocock/skills)
+
+- **domain-modeling**：建立與磨利專案的領域模型——`CONTEXT.md` 術語表 + ADR 決策紀錄（三條件才寫）。
+- **improve-architecture（去蕪存菁）**：掃描程式碼庫找出深化模組的機會，用 deletion test 判斷哪些抽象在白佔位。
+- **writing-great-skills**：寫 skill 的品質判準——leading word、progressive disclosure、no-op、failure modes（含 GLOSSARY）。
 
 ### 數據與檔案 (Active)
+
 - **Office 專家**：Word (XML 級別編輯)、Excel (數據分析)、PPT (專業設計師版)、PDF (高精準提取)。
 
 ### 視覺與藝術 (Disabled by default)
+
 - **設計專家**：UI-UX Pro Max、玻璃擬態、前端設計、自動化測試。
 - **創意工具**：生成式藝術、Slack GIF 製作。
 
 ---
 
 ## 📜 聲明與致謝
+
 本專案為開源社群作品，核心邏輯之版權歸屬原創作者。詳細致謝清單請參閱 [ACKNOWLEDGEMENTS.md](./ACKNOWLEDGEMENTS.md)。

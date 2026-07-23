@@ -10,6 +10,10 @@
 - **[OthmanAdi/planning-with-files](https://github.com/OthmanAdi/planning-with-files)**
   - 提供了以 Markdown 檔案為核心的計畫追蹤系統。
 
+### 1b. 工程方法論與設計詞彙
+- **[mattpocock/skills](https://github.com/mattpocock/skills)** (Author: Matt Pocock / @mattpocock)
+  - 提供了 `domain-modeling`（CONTEXT.md + ADR）、`improve-architecture`（deep module / deletion test）、`writing-great-skills` 的核心邏輯，並啟發了 `sp-brainstorming`（grilling）與 `code-review`（雙軸 + Fowler code smell）的升級。
+
 ### 2. 官方插件與專業工具
 - **[anthropics/skills](https://github.com/anthropics/skills)**
   - 提供了 `docx`, `xlsx`, `pdf`, `pptx`, `mcp-builder`, `webapp-testing` 等權威技能。
