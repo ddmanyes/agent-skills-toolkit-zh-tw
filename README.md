@@ -58,6 +58,10 @@
 
 - **Office 專家**：Word (XML 級別編輯)、Excel (數據分析)、PPT (專業設計師版)、PDF (高精準提取)。
 
+### 圖表與知識視覺化 (Active)
+
+- **diagram-design**：將文字、Mermaid 或 draw.io 重繪為專業、可存取的 SVG／單檔 HTML；支援架構圖、流程圖、資料流、時間軸與 Dots／signal-flow，並可把產物索引寫回 Second Brain。
+
 ### 視覺與藝術 (Disabled by default)
 
 - **設計專家**：UI-UX Pro Max、玻璃擬態、前端設計、自動化測試。
