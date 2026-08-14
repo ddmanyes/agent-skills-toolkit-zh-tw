@@ -24,5 +24,9 @@
 - **[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)**
   - 提供了極致的前端設計風格與優先等級規範。
 
+### 4. 圖表設計與語意重繪
+- **[cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)** (Author: Cathryn Lavery)
+  - 提供 `diagram-design` 的 SVG／HTML 圖表工作流、Mermaid 與 draw.io 結構抽取器，以及安全與可存取性自檢腳本。本倉庫收錄依 MIT License 改編的繁體中文精簡版，並新增 Dots／signal-flow 與 Second Brain 整合指引。
+
 ---
 *本倉庫為繁體中文在地化優化版，旨在服務台灣開發者。所有原始邏輯之版權歸屬原作者及其對應之開源協議。*
