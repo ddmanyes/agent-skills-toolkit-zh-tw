@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagram Design（圖表設計）"
+  short_description: "將文字、Mermaid 或 draw.io 重繪為專業 SVG 圖表"
+  default_prompt: "使用 $diagram-design 將這份內容轉成清楚、可存取的 SVG／HTML 圖表。"
