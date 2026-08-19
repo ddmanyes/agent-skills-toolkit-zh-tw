@@ -30,17 +30,18 @@ jobs:
       - name: Find and validate changed Skills
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         shell: bash
         run: |
           if [[ -z "$BASE_SHA" || "$BASE_SHA" =~ ^0+$ ]]; then
-            mapfile -t skill_dirs < <(find skills disabled_skills -mindepth 1 -maxdepth 1 -type d | sort)
-          else
-            mapfile -t skill_dirs < <(
-              git diff --name-only "$BASE_SHA" "$GITHUB_SHA" -- skills disabled_skills |
-              awk -F/ '/^(skills|disabled_skills)\/[^/]+\// {print $1 "/" $2}' |
-              sort -u
-            )
+            BASE_SHA="origin/$DEFAULT_BRANCH"
           fi
+
+          mapfile -t skill_dirs < <(
+            git diff --name-only "$BASE_SHA" "$GITHUB_SHA" -- skills disabled_skills |
+            awk -F/ '/^(skills|disabled_skills)\/[^\/]+\// {print $1 "/" $2}' |
+            sort -u
+          )
 
           if (( ${#skill_dirs[@]} == 0 )); then
             echo "No changed Skills to validate."
