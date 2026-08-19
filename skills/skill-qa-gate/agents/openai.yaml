@@ -1,0 +1,6 @@
+interface:
+  display_name: "Skill QA Gate"
+  short_description: "檢查 Skill 結構、安全邊界、語義保留與指令歧義"
+  default_prompt: "Use $skill-qa-gate to validate this Skill before it is published."
+policy:
+  allow_implicit_invocation: true
