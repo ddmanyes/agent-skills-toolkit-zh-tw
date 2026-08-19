@@ -62,6 +62,10 @@
 
 - **diagram-design**：將文字、Mermaid 或 draw.io 重繪為專業、可存取的 SVG／單檔 HTML；支援架構圖、流程圖、資料流、時間軸與 Dots／signal-flow，並可把產物索引寫回 Second Brain。
 
+### 自動化與知識管理 (Active)
+
+- **github-stars-radar**：增量擷取 GitHub Stars，以固定量表解釋與評分 repository，將候選卡、深度分析、去重 ledger 與每週工具雷達寫入 Second Brain；支援每日、每週與失敗重播模式，且不執行或安裝第三方程式碼。
+
 ### 視覺與藝術 (Disabled by default)
 
 - **設計專家**：UI-UX Pro Max、玻璃擬態、前端設計、自動化測試。

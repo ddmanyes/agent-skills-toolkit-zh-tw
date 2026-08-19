@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Stars Radar"
+  short_description: "增量解析 GitHub Stars 並整理至 Second Brain"
+  default_prompt: "Use $github-stars-radar to process new GitHub Stars and record candidate cards in Second Brain."
