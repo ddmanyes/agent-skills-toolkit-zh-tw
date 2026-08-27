@@ -48,4 +48,14 @@ jobs:
             exit 0
           fi
 
-          python3 skills/skill-qa-gate/scripts/lint_skill.py "${skill_dirs[@]}"
+          valid_skill_dirs=()
+          for skill_dir in "${skill_dirs[@]}"; do
+            [[ -f "$skill_dir/SKILL.md" ]] && valid_skill_dirs+=("$skill_dir")
+          done
+
+          if (( ${#valid_skill_dirs[@]} == 0 )); then
+            echo "Changed Skill paths were deleted or renamed; no existing directories to validate."
+            exit 0
+          fi
+
+          python3 skills/skill-qa-gate/scripts/lint_skill.py "${valid_skill_dirs[@]}"
