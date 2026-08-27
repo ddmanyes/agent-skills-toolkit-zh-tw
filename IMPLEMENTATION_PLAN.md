@@ -59,19 +59,19 @@ antigravity-skills-zht/
 
 ### 任務 3：建立跨來源週報 Skill
 
-- [ ] 建立 `content-radar` weekly workflow 與固定週報契約。
-- [ ] 使用 ISO week heading 做冪等；只讀來源狀態與 atomic notes。
-- [ ] 保留 GitHub 數字分數；社群內容使用可解釋優先級，不跨量表比較。
-- [ ] 在來源超過 48 小時未同步時標示資料新鮮度警告。
+- [x] 建立 `content-radar` weekly workflow 與固定週報契約。
+- [x] 使用 ISO week heading 做冪等；只讀來源狀態與 atomic notes。
+- [x] 保留 GitHub 數字分數；社群內容使用可解釋優先級，不跨量表比較。
+- [x] 在來源超過 48 小時未同步時標示資料新鮮度警告。
 - 預期行為：無新增時靜默；非空週報或讀寫失敗時才通知。
 - 驗證指令：`lint_skill.py skills/content-radar` 與情境測試審查。
 - 相關檔案：`skills/content-radar/`。
 
 ### 任務 4：更新路由與文件
 
-- [ ] 更新 `ask-matt` 的 GitHub、X、Threads 與跨來源週報分流。
-- [ ] 將 `github-stars-radar weekly` 標為手動相容模式，預設週報改由 `content-radar`。
-- [ ] 更新 README 與操作說明。
+- [x] 更新 `ask-matt` 的 GitHub、X、Threads 與跨來源週報分流。
+- [x] 將 `github-stars-radar weekly` 標為手動相容模式，預設週報改由 `content-radar`。
+- [x] 更新 README 與操作說明。
 - 預期行為：路由只建議目前實際安裝的 Skill；既有 GitHub daily 不受影響。
 - 驗證指令：`git diff --check`、Skill QA。
 - 相關檔案：`skills/ask-matt/SKILL.md`、`skills/github-stars-radar/SKILL.md`、`README.md`。

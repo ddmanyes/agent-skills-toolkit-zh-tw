@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cross-source Content Radar"
+  short_description: "彙整 GitHub、X 與 Threads 的每週 SB 雷達"
+  default_prompt: "Use $content-radar to publish this week's idempotent cross-source radar from Second Brain."

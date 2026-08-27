@@ -1,6 +1,6 @@
 ---
 name: github-stars-radar
-description: Incrementally collect a GitHub user's newly starred public repositories, explain and score each repository, create or update atomic candidate notes in Second Brain, deepen high-value candidates, maintain an append-only processing ledger, and publish a weekly tool radar. Use for scheduled daily or weekly GitHub Stars ingestion, on-demand starred-repository review, replaying failed Star imports, or checking whether newly starred tools deserve deeper evaluation.
+description: Incrementally collect a GitHub user's newly starred public repositories, explain and score each repository, create or update atomic candidate notes in Second Brain, deepen high-value candidates, and maintain an append-only processing ledger. Use for scheduled daily GitHub Stars ingestion, on-demand review, replaying failed imports, or the legacy GitHub-only weekly report.
 ---
 
 # GitHub Stars Radar
@@ -31,7 +31,7 @@ description: Incrementally collect a GitHub user's newly starred public reposito
 ## 模式選擇
 
 - 使用 `daily`：擷取並處理新增 Stars；無新增時靜默結束。
-- 使用 `weekly`：彙整最近七天已處理項目，追加固定週報。
+- 使用 `weekly`：手動相容模式，彙整最近七天 GitHub 項目。預設跨來源週報使用 `content-radar`。
 - 使用 `replay`：針對指定 repository 或未完成 ledger 項目重新處理，不重複建立筆記。
 
 ## Daily 流程
@@ -61,7 +61,7 @@ description: Incrementally collect a GitHub user's newly starred public reposito
 11. 只有在本批沒有失敗、`truncated=false` 且所有候選筆記與 record 都成功時，追加 cursor marker。Cursor 使用 ledger 所有成功 event 中最大的 `starred_at`。
 12. 只有出現至少一個 75 分以上項目或發生失敗時回報使用者；其他成功項目留待週報。
 
-## Weekly 流程
+## Weekly 流程（手動相容）
 
 1. 呼叫 `get_agent_instructions()`，再讀 ledger。
 2. 依 `starred_at` 選取最近七天紀錄，讀取相應候選筆記。

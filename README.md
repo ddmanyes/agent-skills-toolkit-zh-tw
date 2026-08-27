@@ -87,6 +87,13 @@ git pull --ff-only
 - **to-questionnaire**：把只有特定利害關係人能回答的未知事項整理成可交付問卷。
 - **ask-matt**：依目前環境實際可用的 Skill，推薦最小工作路徑與替代方案。
 
+### 跨來源內容雷達 (Active)
+
+- **github-stars-radar**：每日增量整理 GitHub Stars、repository 專用評分與高價值深度分析。
+- **x-bookmarks-radar**：透過已登入瀏覽器增量整理 X 書籤，維護獨立同步狀態與重試契約。
+- **threads-bookmarks-radar**：透過已登入瀏覽器增量整理 Threads saved posts，維護獨立同步狀態與重試契約。
+- **content-radar**：從 Second Brain 唯讀彙整三個來源，產生冪等的每週跨來源雷達。
+
 ### 快速視覺解說 (Active)
 
 - **eli5**：針對單一主題產生一頁、離線、自包含的視覺 HTML；與長期學習用途的 `teach` 分工。
