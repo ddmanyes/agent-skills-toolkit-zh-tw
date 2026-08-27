@@ -22,7 +22,7 @@
 > 2. **建立目錄**：在上述路徑內建立「skills」與「disabled_skills」資料夾（如果尚未存在）。
 >
 > 3. **連線與部署**：
->    - 存取 GitHub 倉庫：https://github.com/你的用戶名/你的倉庫名
+>    - 存取 GitHub 倉庫：https://github.com/ddmanyes/antigravity-skills-zht
 >    - 讀取「skills/」與「disabled_skills/」目錄下的所有技能。
 >
 > 4. **衝突與更新策略**：
@@ -40,6 +40,25 @@
 
 ---
 
+## 🔄 更新本機技能
+
+在已 clone 的倉庫中執行：
+
+```bash
+git pull --ff-only
+./scripts/sync-local-skills.sh --all
+```
+
+同步目標：
+
+- Claude／Claude Code：`~/.claude/skills`
+- Codex／通用 Agent：`~/.agents/skills`
+- Antigravity：`~/.gemini/config/skills`
+
+同步採增量覆蓋：更新本倉庫管理的同名技能，但保留其他本機技能。已淘汰的 `writing-great-skills` 會在新版 `writing-for-agents` 寫入成功後移到各環境的 `skills-archive`，可隨時復原。
+
+---
+
 ## 📂 技能包內容清單
 
 ### 核心開發 (Active)
@@ -47,12 +66,23 @@
 - **SP 系列**：腦力激盪（已升級為 grilling 決策樹拷問）、極細計畫、自動執行、子代理調度、測試除錯等。
 - **架構工具**：專案建築師 v3.0、循環開發 (Ralph)、檔案計畫管理 (Manus 風格)。
 - **代碼品質**：資深代碼審查（雙軸 Standards/Spec 並行 + Fowler code smell 基線）、代碼簡化專家。
+- **Skill QA Gate**：建立、修改或發布 Skill 時，檢查結構、安全邊界、指令歧義與語義保留；一般 Skill 執行不會觸發。
 
 ### 設計方法論 (Active，源自 mattpocock/skills)
 
 - **domain-modeling**：建立與磨利專案的領域模型——`CONTEXT.md` 術語表 + ADR 決策紀錄（三條件才寫）。
 - **improve-architecture（去蕪存菁）**：掃描程式碼庫找出深化模組的機會，用 deletion test 判斷哪些抽象在白佔位。
-- **writing-great-skills**：寫 skill 的品質判準——leading word、progressive disclosure、no-op、failure modes（含 GLOSSARY）。
+- **writing-for-agents**：新版 Agent 文件寫作規範，取代 `writing-great-skills`；涵蓋 Skill、`AGENTS.md`、`CLAUDE.md`、規格與其他 Agent 會讀取的文件。
+- **wait-what**：當上一段解釋沒有講清楚時，以補足背景、白話與專案詞彙重新說明。
+- **research**：只從高信任的一手來源研究，留下具引用、可追溯的 Markdown 結果。
+- **teach**：建立跨多次對話的教學工作區，保存任務、來源、HTML 課程與學習紀錄。
+- **tdd**：以 red–green–refactor 與垂直切片推進功能或修復。
+- **to-questionnaire**：把只有特定利害關係人能回答的未知事項整理成可交付問卷。
+- **ask-matt**：依目前環境實際可用的 Skill，推薦最小工作路徑與替代方案。
+
+### 快速視覺解說 (Active)
+
+- **eli5**：針對單一主題產生一頁、離線、自包含的視覺 HTML；與長期學習用途的 `teach` 分工。
 
 ### 數據與檔案 (Active)
 

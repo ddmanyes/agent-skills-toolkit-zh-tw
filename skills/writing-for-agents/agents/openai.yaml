@@ -1,0 +1,4 @@
+interface:
+  display_name: "Writing for Agents"
+  short_description: "Write documents agents consume"
+  default_prompt: "Use $writing-for-agents to improve these agent-facing instructions."

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Teach"
+  short_description: "Learn a concept in a guided workspace"
+  default_prompt: "Use $teach to build a multi-session learning workspace for this topic."
+policy:
+  allow_implicit_invocation: false

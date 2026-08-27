@@ -1,0 +1,51 @@
+name: Skill QA
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "disabled_skills/**"
+      - ".github/workflows/skill-qa.yml"
+  push:
+    paths:
+      - "skills/**"
+      - "disabled_skills/**"
+      - ".github/workflows/skill-qa.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run validator tests
+        run: python3 skills/skill-qa-gate/scripts/test_lint_skill.py
+      - name: Find and validate changed Skills
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        shell: bash
+        run: |
+          if [[ -z "$BASE_SHA" || "$BASE_SHA" =~ ^0+$ ]]; then
+            BASE_SHA="origin/$DEFAULT_BRANCH"
+          fi
+
+          mapfile -t skill_dirs < <(
+            git diff --name-only "$BASE_SHA" "$GITHUB_SHA" -- skills disabled_skills |
+            awk -F/ '/^(skills|disabled_skills)\/[^\/]+\// {print $1 "/" $2}' |
+            sort -u
+          )
+
+          if (( ${#skill_dirs[@]} == 0 )); then
+            echo "No changed Skills to validate."
+            exit 0
+          fi
+
+          python3 skills/skill-qa-gate/scripts/lint_skill.py "${skill_dirs[@]}"

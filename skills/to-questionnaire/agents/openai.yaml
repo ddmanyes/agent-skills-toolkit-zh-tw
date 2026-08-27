@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Questionnaire"
+  short_description: "Front-load questions into a doc for someone to answer"
+  default_prompt: "Use $to-questionnaire to turn these unknowns into a stakeholder questionnaire."
+policy:
+  allow_implicit_invocation: false

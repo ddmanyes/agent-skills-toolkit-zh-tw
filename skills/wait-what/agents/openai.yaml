@@ -1,0 +1,6 @@
+interface:
+  display_name: "Wait What"
+  short_description: "Re-pitch that: simpler, with the context I'm missing"
+  default_prompt: "Use $wait-what to re-pitch the previous explanation with the missing context."
+policy:
+  allow_implicit_invocation: false

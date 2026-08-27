@@ -12,13 +12,15 @@
 
 ### 1b. 工程方法論與設計詞彙
 - **[mattpocock/skills](https://github.com/mattpocock/skills)** (Author: Matt Pocock / @mattpocock)
-  - 提供了 `domain-modeling`（CONTEXT.md + ADR）、`improve-architecture`（deep module / deletion test）、`writing-great-skills` 的核心邏輯，並啟發了 `sp-brainstorming`（grilling）與 `code-review`（雙軸 + Fowler code smell）的升級。
+  - 提供了 `domain-modeling`、`improve-architecture`、`writing-for-agents`、`wait-what`、`research`、`teach`、`tdd`、`to-questionnaire` 與 `ask-matt` 路由概念，並啟發了 `sp-brainstorming`（grilling）與 `code-review`（雙軸 + Fowler code smell）的升級。
 
 ### 2. 官方插件與專業工具
 - **[anthropics/skills](https://github.com/anthropics/skills)**
   - 提供了 `docx`, `xlsx`, `pdf`, `pptx`, `mcp-builder`, `webapp-testing` 等權威技能。
 - **[anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official)**
   - 提供了 `code-simplifier` 等代碼優化工具。
+- **[anthropics/claude-plugins-community](https://github.com/anthropics/claude-plugins-community)**（`eli5` 原作者：Thariq Shihipar）
+  - 提供 `eli5` 的單頁視覺解說概念；本倉庫版本加入 Codex metadata、離線資產、安全、可存取性與來源查核規則。
 
 ### 3. UI/UX 視覺強化
 - **[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)**

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ask Matt Skill Router"
+  short_description: "依目前可用技能選出最小工作路徑"
+  default_prompt: "Use $ask-matt to recommend the smallest useful Skill path for this task."
+policy:
+  allow_implicit_invocation: false

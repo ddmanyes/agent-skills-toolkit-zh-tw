@@ -1,0 +1,4 @@
+interface:
+  display_name: "ELI5 Visual Explainer"
+  short_description: "Make a one-page picture-first HTML explainer"
+  default_prompt: "Use $eli5 to explain this topic as a one-page visual HTML artifact."
