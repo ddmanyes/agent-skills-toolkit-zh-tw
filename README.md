@@ -42,11 +42,18 @@
 
 ## 🔄 更新本機技能
 
-在已 clone 的倉庫中執行：
+macOS／Linux 在已 clone 的倉庫中執行：
 
 ```bash
 git pull --ff-only
 ./scripts/sync-local-skills.sh --all
+```
+
+Windows PowerShell：
+
+```powershell
+git pull --ff-only
+.\scripts\sync-local-skills.ps1 -All
 ```
 
 同步目標：
