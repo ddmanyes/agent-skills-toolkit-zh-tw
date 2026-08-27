@@ -88,7 +88,13 @@ for target in "${targets[@]}"; do
     fi
 
     mkdir -p "$destination"
-    rsync -a --exclude '.DS_Store' --exclude '._*' "$skill_dir/" "$destination/"
+    rsync -a \
+      --exclude '.DS_Store' \
+      --exclude '._*' \
+      --exclude '.Rhistory' \
+      --exclude '__pycache__' \
+      --exclude '*.py[cod]' \
+      "$skill_dir/" "$destination/"
     echo "  updated: $skill_name"
   done
 
