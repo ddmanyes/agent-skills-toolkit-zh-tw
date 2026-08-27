@@ -1,36 +1,38 @@
 # Antigravity Skills ZHT (繁體中文優化版) 🚀
 
-歡迎使用！本專案收錄了超過 25 個經由開發者社群優化的 **Claude Code (Antigravity)** 高階技能。
+歡迎使用！本專案目前收錄 38 個 Active Skills，可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
 
-我們已經將這些技能翻譯為繁體中文，並針對「資訊分析」、「UI/UX 設計」與「自動化開發」進行了邏輯強化。
+這些 Skills 經繁體中文優化，並針對資訊分析、Agent 工作流、自動化開發與內容整理強化；每個 Skill 的 scripts、references 與其他支援資源也會一起同步。
 
 ---
 
-## ⚡️ 一鍵快速安裝 (推薦新手使用)
+## ⚡️ 快速安裝
 
-請將以下這段內容**完整複製**，並直接貼給你的 **Claude / Antigravity** 助手：
+建議 clone 完整 repository，再使用同步腳本；不要只複製 `SKILL.md`，否則可能漏掉 Skill 需要的 scripts、references、templates 或其他資源。
 
-> ```text
-> 我是新手，我想安裝「Antigravity Skills ZHT」技能包。
->
-> 請幫我執行以下自動化部署任務：
->
-> 1. **路徑偵測**：自動辨識我的作業系統路徑：
->    - Mac/Linux: ~/.gemini/antigravity/
->    - Windows: %USERPROFILE%/.gemini/antigravity/
->
-> 2. **建立目錄**：在上述路徑內建立「skills」與「disabled_skills」資料夾（如果尚未存在）。
->
-> 3. **連線與部署**：
->    - 存取 GitHub 倉庫：https://github.com/ddmanyes/antigravity-skills-zht
->    - 讀取「skills/」與「disabled_skills/」目錄下的所有技能。
->
-> 4. **衝突與更新策略**：
->    - 如果發現我的電腦裡已經有同名的技能資料夾，請逐一詢問我：「檢測到舊版 [技能名稱]，是否要以繁體中文優化版覆蓋更新？」
->    - 如果是新的技能，請直接建立資料夾並寫入 SKILL.md。
->
-> 5. **權限要求**：請自動幫我完成所有目錄建立與檔案寫入，結束後顯示完整的技能佈署地圖。
-> ```
+macOS／Linux：
+
+```bash
+git clone https://github.com/ddmanyes/antigravity-skills-zht.git
+cd antigravity-skills-zht
+./scripts/sync-local-skills.sh --all
+```
+
+Windows PowerShell：
+
+```powershell
+git clone https://github.com/ddmanyes/antigravity-skills-zht.git
+cd antigravity-skills-zht
+.\scripts\sync-local-skills.ps1 -All
+```
+
+`--all`／`-All` 會同步到：
+
+- Claude／Claude Code：`~/.claude/skills`
+- Codex／通用 Agent：`~/.agents/skills`
+- Antigravity：`~/.gemini/config/skills`
+
+同步完成後，請重啟 Agent 應用程式或開啟新 session，讓 Skill discovery 重新載入。
 
 ---
 
@@ -93,6 +95,17 @@ git pull --ff-only
 - **x-bookmarks-radar**：透過已登入瀏覽器增量整理 X 書籤，維護獨立同步狀態與重試契約。
 - **threads-bookmarks-radar**：透過已登入瀏覽器增量整理 Threads saved posts，維護獨立同步狀態與重試契約。
 - **content-radar**：從 Second Brain 唯讀彙整三個來源，產生冪等的每週跨來源雷達。
+
+建議讓三個 collector 分開執行，再由 `content-radar` 統一產生週報；單一來源登入失效時，不會拖垮其他來源。
+
+| 工作 | Skill | 建議排程 | 執行位置／前提 |
+| --- | --- | --- | --- |
+| GitHub Stars 增量收集 | `github-stars-radar` | 每日 12:00 | 可存取 GitHub 與中央 Second Brain 的電腦 |
+| Threads saved posts 增量收集 | `threads-bookmarks-radar` | 每日 12:30 | 保有 Threads 登入狀態的瀏覽器電腦 |
+| X 書籤增量收集 | `x-bookmarks-radar` | 每日，沿用該機既有時段 | 保有 X 登入狀態的瀏覽器電腦 |
+| 三來源週報 | `content-radar` | 每週一 13:00 | 可讀取中央 Second Brain 的電腦 |
+
+`content-radar` 只彙整已成功寫入 Second Brain 的內容，不會代替每日 collector 重新抓取來源。舊版 GitHub-only 週報可保留作手動相容用途，但不應與跨來源週報重複排程。
 
 ### 快速視覺解說 (Active)
 
