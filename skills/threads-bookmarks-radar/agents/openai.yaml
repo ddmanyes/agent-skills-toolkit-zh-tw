@@ -1,0 +1,4 @@
+interface:
+  display_name: "Threads Bookmarks Radar"
+  short_description: "增量整理 Threads 已儲存貼文並安全寫入 SB"
+  default_prompt: "Use $threads-bookmarks-radar to process new saved Threads posts into Second Brain."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "X Bookmarks Radar"
+  short_description: "增量整理 X 書籤並安全寫入 Second Brain"
+  default_prompt: "Use $x-bookmarks-radar to process new saved X posts into Second Brain."

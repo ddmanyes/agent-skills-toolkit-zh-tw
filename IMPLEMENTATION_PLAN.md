@@ -40,19 +40,19 @@ antigravity-skills-zht/
 
 ### 任務 1：固定來源 URL 契約（Red → Green → Refactor）
 
-- [ ] 先為 X 與 Threads 撰寫正常 URL、媒體尾碼、query、錯誤 host 與錯誤 path 測試。
-- [ ] 執行測試並確認在實作缺席時失敗。
-- [ ] 建立各來源 `normalize_url.py`，只輸出可作為 ledger key 的 canonical URL。
-- [ ] 重構共同的錯誤訊息與 CLI 輸出，重新執行測試。
+- [x] 先為 X 與 Threads 撰寫正常 URL、媒體尾碼、query、錯誤 host 與錯誤 path 測試。
+- [x] 執行測試並確認在實作缺席時失敗。
+- [x] 建立各來源 `normalize_url.py`，只輸出可作為 ledger key 的 canonical URL。
+- [x] 重構共同的錯誤訊息與 CLI 輸出，重新執行測試。
 - 預期行為：合法貼文 URL 產生穩定 key；非貼文 URL 以非零狀態失敗。
 - 驗證指令：`python3 skills/*-bookmarks-radar/scripts/test_normalize_url.py`
 - 相關檔案：兩個 `scripts/` 目錄。
 
 ### 任務 2：建立來源專用書籤 Skills
 
-- [ ] 建立 `threads-bookmarks-radar` 的 browser、去重、寫入順序、NSFW 與失敗恢復契約。
-- [ ] 建立 `x-bookmarks-radar`，沿用 Second Brain 現有 X 同步狀態與來源頁設定。
-- [ ] 為兩個 Skill 建立 Codex UI metadata 與 atomic note 格式。
+- [x] 建立 `threads-bookmarks-radar` 的 browser、去重、寫入順序、NSFW 與失敗恢復契約。
+- [x] 建立 `x-bookmarks-radar`，沿用 Second Brain 現有 X 同步狀態與來源頁設定。
+- [x] 為兩個 Skill 建立 Codex UI metadata 與 atomic note 格式。
 - 預期行為：兩個來源各自維護 ledger；任何部分失敗都不會提前標記已處理。
 - 驗證指令：`lint_skill.py`、來源 URL 單元測試。
 - 相關檔案：`skills/threads-bookmarks-radar/`、`skills/x-bookmarks-radar/`。
