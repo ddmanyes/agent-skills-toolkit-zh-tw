@@ -1,81 +1,98 @@
-# GitHub Stars Radar Skill 實作計畫
+# 跨來源內容雷達實作計畫
 
 ## 目標摘要
 
-建立 `github-stars-radar` Skill，以每日增量模式擷取 `ddmanyes` 新增的公開 GitHub Stars，產生可解釋的候選卡並依固定量表評分；75 分以上自動做深度分析。每週模式彙整固定工具雷達。所有 Second Brain 寫入必須透過中央 MCP，且排程不得安裝或執行第三方 repository。
-
-目標目錄目前不是 Git repository，因此本次無法執行原子 commit；改以逐步驗證輸出與最終檔案清單保留可稽核紀錄，不初始化新的 repository 以免擴張使用者授權範圍。
+保留 `github-stars-radar` 的 repository 專用分析，新增 X 與 Threads 的獨立書籤擷取 Skill，再由 `content-radar` 每週唯讀彙整 Second Brain 中已成功寫入的三個來源。每日擷取失敗彼此隔離；任何來源都必須先完成 atomic note 與索引寫入，才能前移自己的同步狀態。
 
 ## 文件架構圖
 
 ```text
 antigravity-skills-zht/
 ├── IMPLEMENTATION_PLAN.md
-└── skills/
-    └── github-stars-radar/
-        ├── SKILL.md
-        ├── agents/
-        │   └── openai.yaml
-        ├── references/
-        │   ├── evaluation-rubric.md
-        │   └── note-contracts.md
-        └── scripts/
-            ├── fetch_new_stars.py
-            └── test_fetch_new_stars.py
+├── README.md
+├── skills/
+│   ├── ask-matt/
+│   │   └── SKILL.md
+│   ├── github-stars-radar/
+│   │   └── SKILL.md
+│   ├── threads-bookmarks-radar/
+│   │   ├── SKILL.md
+│   │   ├── agents/openai.yaml
+│   │   ├── references/note-contracts.md
+│   │   └── scripts/
+│   │       ├── normalize_url.py
+│   │       └── test_normalize_url.py
+│   ├── x-bookmarks-radar/
+│   │   ├── SKILL.md
+│   │   ├── agents/openai.yaml
+│   │   ├── references/note-contracts.md
+│   │   └── scripts/
+│   │       ├── normalize_url.py
+│   │       └── test_normalize_url.py
+│   └── content-radar/
+│       ├── SKILL.md
+│       ├── agents/openai.yaml
+│       └── references/weekly-contract.md
+└── SKILL_AUDIT_2026-08-27.md
 ```
 
 ## 任務列表
 
-### 任務 1：建立 Skill 骨架
+### 任務 1：固定來源 URL 契約（Red → Green → Refactor）
 
-- [x] 使用系統 `init_skill.py` 建立 `github-stars-radar`，只建立 `scripts/` 與 `references/`。
-- 預期行為：產生合法 `SKILL.md` 與 `agents/openai.yaml`。
-- 驗證指令：`quick_validate.py skills/github-stars-radar`
-- 相關檔案：`skills/github-stars-radar/SKILL.md`、`skills/github-stars-radar/agents/openai.yaml`
+- [ ] 先為 X 與 Threads 撰寫正常 URL、媒體尾碼、query、錯誤 host 與錯誤 path 測試。
+- [ ] 執行測試並確認在實作缺席時失敗。
+- [ ] 建立各來源 `normalize_url.py`，只輸出可作為 ledger key 的 canonical URL。
+- [ ] 重構共同的錯誤訊息與 CLI 輸出，重新執行測試。
+- 預期行為：合法貼文 URL 產生穩定 key；非貼文 URL 以非零狀態失敗。
+- 驗證指令：`python3 skills/*-bookmarks-radar/scripts/test_normalize_url.py`
+- 相關檔案：兩個 `scripts/` 目錄。
 
-### 任務 2：以測試定義增量擷取契約（Red）
+### 任務 2：建立來源專用書籤 Skills
 
-- [x] 建立標準函式庫 `unittest`，涵蓋 star API envelope、ledger 去重、時間排序、批次上限與錯誤 payload。
-- 預期行為：在尚未建立實作前測試失敗。
-- 驗證指令：`python3 skills/github-stars-radar/scripts/test_fetch_new_stars.py`
-- 相關檔案：`skills/github-stars-radar/scripts/test_fetch_new_stars.py`
+- [ ] 建立 `threads-bookmarks-radar` 的 browser、去重、寫入順序、NSFW 與失敗恢復契約。
+- [ ] 建立 `x-bookmarks-radar`，沿用 Second Brain 現有 X 同步狀態與來源頁設定。
+- [ ] 為兩個 Skill 建立 Codex UI metadata 與 atomic note 格式。
+- 預期行為：兩個來源各自維護 ledger；任何部分失敗都不會提前標記已處理。
+- 驗證指令：`lint_skill.py`、來源 URL 單元測試。
+- 相關檔案：`skills/threads-bookmarks-radar/`、`skills/x-bookmarks-radar/`。
 
-### 任務 3：實作增量擷取器（Green）
+### 任務 3：建立跨來源週報 Skill
 
-- [x] 實作 GitHub 公開 API 抓取、`repo_id + starred_at` 鍵值、ledger 解析與 JSON 輸出。
-- [x] 支援 `--username`、`--ledger-file`、`--limit`、`--input-json`，並保持唯讀、不寫 Vault。
-- 預期行為：相同項目不重複輸出；輸出由新到舊排序；錯誤以非零狀態結束。
-- 驗證指令：`python3 skills/github-stars-radar/scripts/test_fetch_new_stars.py`
-- 相關檔案：`skills/github-stars-radar/scripts/fetch_new_stars.py`
+- [ ] 建立 `content-radar` weekly workflow 與固定週報契約。
+- [ ] 使用 ISO week heading 做冪等；只讀來源狀態與 atomic notes。
+- [ ] 保留 GitHub 數字分數；社群內容使用可解釋優先級，不跨量表比較。
+- [ ] 在來源超過 48 小時未同步時標示資料新鮮度警告。
+- 預期行為：無新增時靜默；非空週報或讀寫失敗時才通知。
+- 驗證指令：`lint_skill.py skills/content-radar` 與情境測試審查。
+- 相關檔案：`skills/content-radar/`。
 
-### 任務 4：重構與固定分析規格（Refactor）
+### 任務 4：更新路由與文件
 
-- [x] 將評分量表、候選卡、深度分析、ledger 與週報格式拆至 references。
-- [x] 在 `SKILL.md` 固定 daily/weekly 流程、MCP 寫入順序、成功後 checkpoint 與通知規則。
-- 預期行為：agent 能在不自行發明格式的前提下安全重跑，且不自動安裝第三方程式。
-- 驗證指令：`quick_validate.py skills/github-stars-radar`
-- 相關檔案：`SKILL.md`、`references/evaluation-rubric.md`、`references/note-contracts.md`
+- [ ] 更新 `ask-matt` 的 GitHub、X、Threads 與跨來源週報分流。
+- [ ] 將 `github-stars-radar weekly` 標為手動相容模式，預設週報改由 `content-radar`。
+- [ ] 更新 README 與操作說明。
+- 預期行為：路由只建議目前實際安裝的 Skill；既有 GitHub daily 不受影響。
+- 驗證指令：`git diff --check`、Skill QA。
+- 相關檔案：`skills/ask-matt/SKILL.md`、`skills/github-stars-radar/SKILL.md`、`README.md`。
 
-### 任務 5：本機與網路 dry-run 驗證
+### 任務 5：全庫 Skill QA 與改善稽核
 
-- [x] 以 fixture 驗證零新增、單筆新增、重複項目與上限。
-- [x] 讀取 `ddmanyes` 公開 Stars，確認能取得 `starred_at` 且不寫入 SB。
-- 預期行為：測試全通過；live dry-run 輸出合法 JSON。
-- 驗證指令：`python3 .../test_fetch_new_stars.py`、`python3 .../fetch_new_stars.py --username ddmanyes --limit 5`
-- 相關檔案：`scripts/fetch_new_stars.py`、`scripts/test_fetch_new_stars.py`
+- [ ] 對所有 active Skills 執行 deterministic validator。
+- [ ] 修正本次變更中的所有 FAIL；不以大規模改寫掩蓋上游 WARN。
+- [ ] 將全庫問題依阻斷、可攜性、觸發準確度與文件負擔分級。
+- [ ] 建立可追蹤的改善報告。
+- 預期行為：本次新增／修改 Skill 為零 FAIL；全庫風險有清楚優先序。
+- 驗證指令：`python3 skills/skill-qa-gate/scripts/lint_skill.py skills/*`
+- 相關檔案：`SKILL_AUDIT_2026-08-27.md`。
 
-### 任務 6：安裝 Skill 與建立排程
+### 任務 6：部署、排程遷移與紀錄
 
-- [x] 將驗證完成的 Skill 安裝至個人 Skill 目錄。
-- [x] 建立每日 12:00 daily automation；無新增時靜默。
-- [x] 建立每週一 12:10 weekly automation；只通知高分項目或失敗。
-- 預期行為：兩個排程啟用並明確呼叫 `$github-stars-radar`。
-- 驗證方式：檢視 automation 設定與已安裝 Skill 檔案。
-- 相關項目：個人 Skill 目錄、Codex automations。
-
-### 任務 7：Second Brain 實作紀錄
-
-- [x] 經 MCP 建立或追加實作紀錄，包含架構、排程、驗證結果與限制。
-- 預期行為：中央 SB 可搜尋到本次實作，不產生直接檔案寫入衝突。
-- 驗證方式：`search_notes("github-stars-radar")` 後讀取命中筆記。
-- 相關筆記：Second Brain coding/project note。
+- [ ] 同步 Claude、Codex／通用 Agent、Antigravity 本機 Skill 目錄。
+- [ ] 更新 Threads 排程，使其明確呼叫新 Skill。
+- [ ] 停用 GitHub 單獨週報，新增每週一 13:00 的跨來源週報。
+- [ ] 不在本機建立 X 排程；將另一台電腦的更新步驟寫入 Second Brain。
+- [ ] 推送 GitHub 並同步 Google Drive repository 副本。
+- 預期行為：不建立重複排程；GitHub daily 與 Threads daily 保持啟用。
+- 驗證方式：回讀 automation、GitHub remote commit、三個本機 Skill 路徑與 SB 筆記。
+- 相關項目：Codex automations、GitHub repository、Second Brain。
