@@ -23,7 +23,7 @@ disable-model-invocation: true
 - 一手來源研究並留下可引用報告：`research`；GitHub Stars 增量整理：`github-stars-radar`。
 - Threads saved posts：`threads-bookmarks-radar`；X 書籤：`x-bookmarks-radar`；從 Second Brain 彙整三個來源的週報：`content-radar`。
 - 需求仍模糊：`sp-brainstorming`；需求已定、需要計畫：`sp-writing-plans`；依既定計畫實作：`sp-executing-plans`。
-- 新功能的測試先行：`tdd`；失敗測試或 bug：`sp-fix-test`；完成後審查：`code-review`。
+- 新功能的測試先行：`tdd`；失敗測試或 bug：`sp-fix-test`；完成後審查：`sp-code-review`。
 - 領域詞彙或 ADR：`domain-modeling`；深模組與架構摩擦：`improve-architecture`。
 - 長任務需要檔案化進度：`planning-with-files`；依 PRD 自主循環：`ralph-loop`；使用者明確授權全自動執行：`autonomous-pilot`。
 - 建立或修改 Skill：`skill-creator`，並以 `skill-qa-gate` 驗證；Agent 會讀的文件同時使用 `writing-for-agents`。

@@ -72,7 +72,7 @@ git pull --ff-only
 
 - **SP 系列**：腦力激盪（已升級為 grilling 決策樹拷問）、極細計畫、自動執行、子代理調度、測試除錯等。
 - **架構工具**：專案建築師 v3.0、循環開發 (Ralph)、檔案計畫管理 (Manus 風格)。
-- **代碼品質**：資深代碼審查（雙軸 Standards/Spec 並行 + Fowler code smell 基線）、代碼簡化專家。
+- **代碼品質**：`sp-code-review`（雙軸 Standards/Spec 並行 + Fowler code smell 基線）、代碼簡化專家。
 - **Skill QA Gate**：建立、修改或發布 Skill 時，檢查結構、安全邊界、指令歧義與語義保留；一般 Skill 執行不會觸發。
 
 ### 設計方法論 (Active，源自 mattpocock/skills)

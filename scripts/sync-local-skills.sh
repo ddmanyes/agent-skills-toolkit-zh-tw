@@ -8,11 +8,13 @@ Usage: scripts/sync-local-skills.sh [--claude] [--agents] [--antigravity] [--all
 Copies active skills from this repository into the selected local skill directories.
 Existing unrelated skills are preserved. The deprecated writing-great-skills directory
 is moved to a recoverable skills-archive directory after writing-for-agents succeeds.
+Set SKILLS_SYNC_HOME to an isolated home root when testing the script.
 EOF
 }
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source_dir="$repo_root/skills"
+skills_sync_home="${SKILLS_SYNC_HOME:-$HOME}"
 
 if [[ ! -d "$source_dir" ]]; then
   echo "Missing source directory: $source_dir" >&2
@@ -43,18 +45,18 @@ fi
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --claude)
-      add_target "$HOME/.claude/skills"
+      add_target "$skills_sync_home/.claude/skills"
       ;;
     --agents)
-      add_target "$HOME/.agents/skills"
+      add_target "$skills_sync_home/.agents/skills"
       ;;
     --antigravity)
-      add_target "$HOME/.gemini/config/skills"
+      add_target "$skills_sync_home/.gemini/config/skills"
       ;;
     --all)
-      add_target "$HOME/.claude/skills"
-      add_target "$HOME/.agents/skills"
-      add_target "$HOME/.gemini/config/skills"
+      add_target "$skills_sync_home/.claude/skills"
+      add_target "$skills_sync_home/.agents/skills"
+      add_target "$skills_sync_home/.gemini/config/skills"
       ;;
     -h|--help)
       usage
@@ -98,6 +100,16 @@ for target in "${targets[@]}"; do
     mkdir -p "$archive_root"
     mv "$legacy" "$archive_target"
     echo "  archived deprecated skill: $archive_target"
+  fi
+
+  legacy_review="$target/code-review"
+  replacement_review="$target/sp-code-review/SKILL.md"
+  if [[ -d "$legacy_review" && ! -L "$legacy_review" && -f "$replacement_review" ]]; then
+    archive_root="$(dirname "$target")/skills-archive"
+    archive_target="$archive_root/code-review-$timestamp"
+    mkdir -p "$archive_root"
+    mv "$legacy_review" "$archive_target"
+    echo "  archived renamed skill: $archive_target"
   fi
 done
 

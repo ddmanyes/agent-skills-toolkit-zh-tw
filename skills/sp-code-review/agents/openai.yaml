@@ -1,0 +1,4 @@
+interface:
+  display_name: "Standards and Spec Code Review"
+  short_description: "以 Standards／Spec 雙軸審查程式碼差異"
+  default_prompt: "Use $sp-code-review to review this change against project standards and its source specification."

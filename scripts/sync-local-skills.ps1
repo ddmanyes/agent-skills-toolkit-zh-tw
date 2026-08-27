@@ -3,13 +3,14 @@ param(
     [switch]$Claude,
     [switch]$Agents,
     [switch]$Antigravity,
-    [switch]$All
+    [switch]$All,
+    [string]$SkillsHome = $HOME
 )
 
 $ErrorActionPreference = "Stop"
 
 if (-not ($Claude -or $Agents -or $Antigravity -or $All)) {
-    Write-Host "Usage: .\scripts\sync-local-skills.ps1 [-Claude] [-Agents] [-Antigravity] [-All]"
+    Write-Host "Usage: .\scripts\sync-local-skills.ps1 [-Claude] [-Agents] [-Antigravity] [-All] [-SkillsHome <path>]"
     exit 2
 }
 
@@ -26,9 +27,9 @@ function Add-Target([string]$Path) {
     }
 }
 
-if ($Claude -or $All) { Add-Target (Join-Path $HOME ".claude\skills") }
-if ($Agents -or $All) { Add-Target (Join-Path $HOME ".agents\skills") }
-if ($Antigravity -or $All) { Add-Target (Join-Path $HOME ".gemini\config\skills") }
+if ($Claude -or $All) { Add-Target (Join-Path $SkillsHome ".claude\skills") }
+if ($Agents -or $All) { Add-Target (Join-Path $SkillsHome ".agents\skills") }
+if ($Antigravity -or $All) { Add-Target (Join-Path $SkillsHome ".gemini\config\skills") }
 
 $Timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 
@@ -66,6 +67,20 @@ foreach ($Target in $Targets) {
             New-Item -ItemType Directory -Force -Path $ArchiveRoot | Out-Null
             Move-Item -LiteralPath $Legacy -Destination $ArchiveTarget
             Write-Host "  archived deprecated skill: $ArchiveTarget"
+        }
+    }
+
+    $LegacyReview = Join-Path $Target "code-review"
+    $ReplacementReview = Join-Path $Target "sp-code-review\SKILL.md"
+    if ((Test-Path -LiteralPath $LegacyReview -PathType Container) -and
+        (Test-Path -LiteralPath $ReplacementReview -PathType Leaf)) {
+        $LegacyReviewItem = Get-Item -LiteralPath $LegacyReview -Force
+        if (-not ($LegacyReviewItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+            $ArchiveRoot = Join-Path (Split-Path -Parent $Target) "skills-archive"
+            $ArchiveTarget = Join-Path $ArchiveRoot "code-review-$Timestamp"
+            New-Item -ItemType Directory -Force -Path $ArchiveRoot | Out-Null
+            Move-Item -LiteralPath $LegacyReview -Destination $ArchiveTarget
+            Write-Host "  archived renamed skill: $ArchiveTarget"
         }
     }
 }

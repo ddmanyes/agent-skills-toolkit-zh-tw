@@ -22,7 +22,7 @@ allowed-tools: Terminal, Read, Write, Edit, Glob, Grep
 4. **狀態回寫**：
     - 測試通過：將該故事的 `status` 修改為 `"passed"`。
     - 追加日誌：在 `progress.txt` 紀錄本次改動。
-    - 學習心得：如有必要，更新 `AGENTS.md` (或 `CLAUDE.md`) 的開發慣例。
+    - 學習心得：本輪產生可重用且尚未記錄的開發慣例時，才更新 `AGENTS.md`（或 `CLAUDE.md`）。
 5. **結束循環**：回報進度並結束本輪對話。
 
 ## 檔案範例 (prd.json)

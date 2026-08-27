@@ -78,10 +78,10 @@ antigravity-skills-zht/
 
 ### 任務 5：全庫 Skill QA 與改善稽核
 
-- [ ] 對所有 active Skills 執行 deterministic validator。
-- [ ] 修正本次變更中的所有 FAIL；不以大規模改寫掩蓋上游 WARN。
-- [ ] 將全庫問題依阻斷、可攜性、觸發準確度與文件負擔分級。
-- [ ] 建立可追蹤的改善報告。
+- [x] 對所有 active Skills 執行 deterministic validator。
+- [x] 修正本次變更中的所有 FAIL；不以大規模改寫掩蓋上游 WARN。
+- [x] 將全庫問題依阻斷、可攜性、觸發準確度與文件負擔分級。
+- [x] 建立可追蹤的改善報告。
 - 預期行為：本次新增／修改 Skill 為零 FAIL；全庫風險有清楚優先序。
 - 驗證指令：`python3 skills/skill-qa-gate/scripts/lint_skill.py skills/*`
 - 相關檔案：`SKILL_AUDIT_2026-08-27.md`。

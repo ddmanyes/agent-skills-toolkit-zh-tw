@@ -12,7 +12,7 @@
 
 ### 1b. 工程方法論與設計詞彙
 - **[mattpocock/skills](https://github.com/mattpocock/skills)** (Author: Matt Pocock / @mattpocock)
-  - 提供了 `domain-modeling`、`improve-architecture`、`writing-for-agents`、`wait-what`、`research`、`teach`、`tdd`、`to-questionnaire` 與 `ask-matt` 路由概念，並啟發了 `sp-brainstorming`（grilling）與 `code-review`（雙軸 + Fowler code smell）的升級。
+  - 提供了 `domain-modeling`、`improve-architecture`、`writing-for-agents`、`wait-what`、`research`、`teach`、`tdd`、`to-questionnaire` 與 `ask-matt` 路由概念，並啟發了 `sp-brainstorming`（grilling）與 `sp-code-review`（雙軸 + Fowler code smell）的升級。
 
 ### 2. 官方插件與專業工具
 - **[anthropics/skills](https://github.com/anthropics/skills)**
