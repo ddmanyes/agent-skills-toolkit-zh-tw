@@ -1,0 +1,4 @@
+interface:
+  display_name: "Second Brain Article Housekeeper"
+  short_description: "Audit Second Brain articles and update reports safely"
+  default_prompt: "Use $sb-article-housekeeper to audit Second Brain article records and safely update the housekeeping report."
