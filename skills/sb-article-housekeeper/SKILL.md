@@ -11,20 +11,32 @@ Read [housekeeping-contract.md](references/housekeeping-contract.md) before reso
 
 ## Authority
 
-Invocation authorizes writes only to the managed article index and housekeeping audit log named in the contract. The Skill may create a missing managed report, snapshot an existing article index, replace its managed block, and append one audit entry. Keep collector notes, source ledgers, sync states, and article notes unchanged.
+Invocation authorizes writes only to the managed article index and housekeeping audit log named in the contract.
+
+The Skill may create a missing managed report. It may snapshot an existing article index. It may replace the managed block and append one audit entry.
+
+The Skill must keep collector notes, source ledgers, sync states, and article notes unchanged.
 
 ## Workflow
 
 1. Call Second Brain `get_agent_instructions()`.
 2. Call `audit_article_records(scope="all", limit=100, stale_after_days=8)`.
-3. Validate the structured result against the required fields in the contract. Stop before all writes if either required call fails or the result is incomplete.
-4. Build the Asia/Taipei weekly run key `article-housekeeping:{YYYY-Www}`. Sort and deduplicate candidate rows by issue type, match key, and vault-relative path.
-5. Resolve the managed article index through `search_notes`. Create it only when no matching note exists. Stop without guessing when more than one note matches.
-6. Read the complete index. Build the managed block from this audit. Preserve all text outside the two managed markers.
-7. If the managed block changed, snapshot the existing index with `snapshot_note_tool(note_path, tier="base")`, then call `update_note` with the complete preserved note. For a new index, call `new_note` with the complete managed block instead.
-8. Treat a confirmed no-change comparison as a successful index step. Only after this step succeeds, resolve the audit log and append one entry when its run-key marker is absent. Create the log with that first entry when it does not exist.
-9. Re-read any target after an uncertain response before retrying its write. Stop after the first confirmed failure and report the completed step, target path, run key, and safe retry point.
-10. Report issue totals, source freshness, candidate-only actions, whether the index changed, and whether the audit entry was appended or already present.
+3. Validate the structured result against the required fields in the contract.
+4. Stop before all writes if either required call fails or the result is incomplete.
+5. Build the Asia/Taipei weekly run key `article-housekeeping:{YYYY-Www}`.
+6. Sort and deduplicate candidate rows by issue type, match key, and vault-relative path.
+7. Resolve the managed article index through `search_notes`.
+8. Create the index only when no matching note exists. Stop without guessing when more than one note matches.
+9. Read the complete index. Build the managed block from this audit. Preserve all text outside the two managed markers.
+10. If an existing managed block changed, call `snapshot_note_tool(note_path, tier="base")`.
+11. After the snapshot succeeds, call `update_note` with the complete preserved note.
+12. For a new index, call `new_note` with the complete managed block instead.
+13. Treat a confirmed no-change comparison as a successful index step.
+14. Resolve the audit log only after the index step succeeds.
+15. Append one entry when the run-key marker is absent. Create the log with that first entry when the log does not exist.
+16. Re-read a target after an uncertain response before retrying its write.
+17. Stop after the first confirmed failure. Report the completed step, target path, run key, and safe retry point.
+18. Report issue totals, source freshness, and candidate-only actions. Report whether the index changed. Report whether the audit entry was appended or already present.
 
 Do not call another Second Brain tool before Steps 1 and 2 succeed. Keep all paths vault-relative. Use only central MCP tools; the vault filesystem is not a write target.
 
