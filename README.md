@@ -1,6 +1,6 @@
 # Antigravity Skills ZHT (繁體中文優化版) 🚀
 
-歡迎使用！本專案目前收錄 38 個 Active Skills，可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
+歡迎使用！本專案目前收錄 39 個 Active Skills，可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
 
 這些 Skills 經繁體中文優化，並針對資訊分析、Agent 工作流、自動化開發與內容整理強化；每個 Skill 的 scripts、references 與其他支援資源也會一起同步。
 
@@ -110,6 +110,10 @@ git pull --ff-only
 ### 快速視覺解說 (Active)
 
 - **eli5**：針對單一主題產生一頁、離線、自包含的視覺 HTML；與長期學習用途的 `teach` 分工。
+
+### 影音課程封存 (Active)
+
+- **course-video-archiver**：下載使用者有權存取且無 DRM 的課程影片，驗證影音、產生逐字稿／SRT／JSON、用投影片校正時間軸重點，並可選擇寫入 Second Brain。
 
 ### 數據與檔案 (Active)
 

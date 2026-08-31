@@ -1,0 +1,6 @@
+interface:
+  display_name: "Course Video Archiver"
+  short_description: "下載、轉錄並整理有權存取的課程影片"
+  default_prompt: "Use $course-video-archiver to download this authorized course video, verify it, create subtitles, and write timestamped notes."
+policy:
+  allow_implicit_invocation: true
