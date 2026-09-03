@@ -13,7 +13,9 @@ description: 用關鍵字搜尋 NCBI/PubMed 上的生醫文獻，列出候選清
 
 ## 使用前提
 
-lcdda-harvest 的工具（`mcp__remote-devices__lcdda-harvest__*`、`mcp__remote-devices__lcdda__*`）只有在使用者的電腦透過 Claude 桌面 app 連結到目前 session 時才存在。動手前，先確認這些工具在你的工具列表裡；如果不在，不要嘗試呼叫，直接告訴使用者現在沒有連線，請他們在該電腦的桌面 app 裡把這個 task 連結到那台機器，之後你才能繼續（PubMed 搜尋跟列清單這兩步不需要連線，可以先做，只有實際 harvest 那步需要）。
+動手前先確認你的工具列表裡有 lcdda-harvest 的工具（`harvest_submit`、`harvest_status`、`import_manual`、`import_status`）與 lcdda vault 的工具（`new_note`、`sync_index` 等）。**用工具名稱的結尾去找，不要用前綴比對**——同一組工具在不同環境下前綴不同：桌面 app 透過遠端裝置連線時是 `mcp__remote-devices__lcdda-harvest__*`，直接連線時則是 `mcp__lcdda-harvest__*`。看到前綴不一樣不代表沒連上。
+
+如果這些工具確實不在列表裡，不要嘗試呼叫，直接告訴使用者現在沒有連線，請他們把這個 task 連結到跑著 lcdda-harvest 的那台機器，之後你才能繼續（PubMed 搜尋跟列清單這兩步不需要連線，可以先做，只有實際 harvest 那步需要）。
 
 ## 流程
 
@@ -50,8 +52,16 @@ lcdda-harvest 的工具（`mcp__remote-devices__lcdda-harvest__*`、`mcp__remote
 
 如果某篇被出版社擋下（bot-blocked）或 harvest 找不到全文：
 1. 請使用者把該篇 PDF 下載到 `~/Downloads`、`~/Desktop` 或 `/Volumes/KINGSTON` 其中之一。
-2. 用 `import_manual(src=<資料夾>, mode="manual")`，先加 `dry_run` 試跑一次，確認檔名比對邏輯抓到的是正確的檔案。
+2. 用 `import_manual(src=<資料夾>, ...)`，先加 `dry_run=True` 試跑一次，確認比對到的是正確的檔案。
 3. 確認無誤後正式匯入，用 `import_status(job_id)` 確認結果。
+
+**`mode` 要看情況選，不要固定用 `manual`**：
+
+- `mode="manual"` — 比對 `manifest.json`，只涵蓋**最後一次** harvest 的那批。剛跑完 harvest、使用者馬上補下載被擋的那幾篇，用這個。
+- `mode="csv"` — 比對 Download Status View（`download-status.csv`）裡有 `target_pdf` 的列，涵蓋跨主題的待辦清單。**如果中間又跑過別的 harvest，或使用者是隔了一段時間才補下載，manifest 已經被新的採集覆蓋，這時要用 `csv`。**
+- `mode="extras"` — 給沒有 `target_pdf` 的漏網之魚，會深掃 PDF 前 5 頁找 DOI。
+
+不確定時就先 `dry_run=True` 跑一次看比對結果，比對不到再換 mode，不要硬收。
 
 ### 6. 確認歸檔位置
 
@@ -59,6 +69,12 @@ harvest/import 完成後,確認存檔位置符合 lcdda 的歸檔規則：
 - 有 DOI/期刊/明確第一作者 → `20-areas/research/{YYYY}_{FirstAuthorLastName}_{ShortTitle}.md`
 - 沒有明確發表資訊 → `30-resources/`，用 kebab-slug 檔名
 - 發表狀態不確定時，先跟使用者確認，不要自行假設已發表
+
+⚠️ **research 筆記的底線分隔符號是有作用的，絕對不要「順手」改成連字號或小寫 slug。** LitNet 的
+`build_litnet.LAB_NOTE` 用 `^\d{4}_[A-Z]` 判斷哪些是濕實驗論文筆記，而 `promote_litnet` 只升級符合
+這個 pattern 的邊。檔名改成 `2013-rezvani-ap1-transcription.md` 這種形式的話，筆記照樣存得進 vault、
+不會有任何錯誤訊息，但**它抽出來的關係永遠不會進 LitNet 圖譜**。`ShortTitle` 是標題前三個英數字詞
+串成的 CamelCase（例：`2013_Rezvani_AP1TranscriptionFactorsEpidermal.md`）。
 
 ### 7.（選擇性）建立 project note 串起這批文獻
 
