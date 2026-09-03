@@ -26,6 +26,16 @@ cd antigravity-skills-zht
 .\scripts\sync-local-skills.ps1 -All
 ```
 
+同步後可以驗證有沒有漏：
+
+```bash
+python3 scripts/check-skill-consistency.py --mirror ~/.agents/skills
+```
+
+它比對 README 宣稱的 skill 數量與實際樹狀結構，並檢查每個鏡像是否都有全部 skill、內容是否一致、
+symlink 有沒有斷。多份鏡像用重複的 `--mirror`，或設 `SKILLS_MIRRORS`（以 `:` 分隔）。有落差時回傳
+非零，方便接進提交前檢查。
+
 `--all`／`-All` 會同步到：
 
 - Claude／Claude Code：`~/.claude/skills`
