@@ -1,6 +1,6 @@
 # Antigravity Skills ZHT (繁體中文優化版) 🚀
 
-歡迎使用！本專案目前收錄 39 個 Active Skills，可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
+歡迎使用！本專案目前收錄 40 個 Active Skills，可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
 
 這些 Skills 經繁體中文優化，並針對資訊分析、Agent 工作流、自動化開發與內容整理強化；每個 Skill 的 scripts、references 與其他支援資源也會一起同步。
 
@@ -114,6 +114,10 @@ git pull --ff-only
 ### 影音課程封存 (Active)
 
 - **course-video-archiver**：下載使用者有權存取且無 DRM 的課程影片，驗證影音、產生逐字稿／SRT／JSON、用投影片校正時間軸重點，並可選擇寫入 Second Brain。
+
+### 生醫文獻收錄 (Active)
+
+- **pubmed-lcdda-harvest**：用關鍵字搜尋 PubMed／NCBI 生醫文獻，列候選清單交由使用者挑選，再透過 lcdda-harvest 抓全文並依歸檔規則存進研究資料庫。刻意保留「人工挑選」這道關卡，避免關鍵字雜訊灌爆資料庫；AI／CS 類主題不適用，應改走 alphaXiv 流程。
 
 ### 數據與檔案 (Active)
 
