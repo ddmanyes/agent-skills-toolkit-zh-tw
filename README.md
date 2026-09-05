@@ -1,4 +1,4 @@
-# Antigravity Skills ZHT (繁體中文優化版) 🚀
+# Agent Skills Toolkit — 繁體中文優化版 🚀
 
 歡迎使用！本專案目前收錄 40 個 Active Skills（其中 4 個 Radar Skills 為過渡相容副本），可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
 
@@ -16,16 +16,16 @@
 macOS／Linux：
 
 ```bash
-git clone https://github.com/ddmanyes/antigravity-skills-zht.git
-cd antigravity-skills-zht
+git clone https://github.com/ddmanyes/agent-skills-toolkit-zh-tw.git
+cd agent-skills-toolkit-zh-tw
 ./scripts/sync-local-skills.sh --all
 ```
 
 Windows PowerShell：
 
 ```powershell
-git clone https://github.com/ddmanyes/antigravity-skills-zht.git
-cd antigravity-skills-zht
+git clone https://github.com/ddmanyes/agent-skills-toolkit-zh-tw.git
+cd agent-skills-toolkit-zh-tw
 .\scripts\sync-local-skills.ps1 -All
 ```
 
