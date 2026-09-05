@@ -1,8 +1,11 @@
 # Antigravity Skills ZHT (繁體中文優化版) 🚀
 
-歡迎使用！本專案目前收錄 40 個 Active Skills，可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
+歡迎使用！本專案目前收錄 40 個 Active Skills（其中 4 個 Radar Skills 為過渡相容副本），可同步到 **Claude／Claude Code、Codex／通用 Agent 與 Antigravity**。
 
 這些 Skills 經繁體中文優化，並針對資訊分析、Agent 工作流、自動化開發與內容整理強化；每個 Skill 的 scripts、references 與其他支援資源也會一起同步。
+
+> [!IMPORTANT]
+> `github-stars-radar`、`x-bookmarks-radar`、`threads-bookmarks-radar` 與 `content-radar` 的正式開發與更新來源已移至獨立的 Private 維運專案。本 repository 暫時保留四個相容副本，供既有安裝遷移與回復使用；兩邊不做雙向同步。Private 專案的存取與安裝資訊只提供給已獲授權的使用者。
 
 ---
 
@@ -99,7 +102,9 @@ git pull --ff-only
 - **to-questionnaire**：把只有特定利害關係人能回答的未知事項整理成可交付問卷。
 - **ask-matt**：依目前環境實際可用的 Skill，推薦最小工作路徑與替代方案。
 
-### 跨來源內容雷達 (Active)
+### 跨來源內容雷達（過渡相容副本）
+
+以下四個目錄仍可由本 repository 的同步腳本安裝，但不再是後續更新的正式來源。同步這些副本不會安裝新的 Codex Plugin，也不會建立或轉移排程。切換到新版後，同一時間只能保留一台 scheduler owner，避免重複收集與重複寫入。
 
 - **github-stars-radar**：每日增量整理 GitHub Stars、repository 專用評分與高價值深度分析。
 - **x-bookmarks-radar**：透過已登入瀏覽器增量整理 X 書籤，維護獨立同步狀態與重試契約。
