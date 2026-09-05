@@ -7,7 +7,7 @@
 ## 文件架構圖
 
 ```text
-antigravity-skills-zht/
+agent-skills-toolkit-zh-tw/
 ├── IMPLEMENTATION_PLAN.md
 ├── README.md
 ├── skills/
