@@ -59,3 +59,11 @@
 修改前保留 repository 快照與已安裝檔案 hash 清單；每次實際覆寫再保留對應原文。同步工具的 skills-backups 與相容層部署回執存於本機，不發布憑證、模型或使用者資料。Git 歷史可還原 repository 內容，安裝备份可還原本機差異。
 
 後續真實模型評估至少涵蓋：一行文字修正、已批准多檔案工作、局部 PPTX 修改、DOCX 不同作者修訂、需要登入／缺工具的失敗、明確手動別名與相近負例。每個支援模型分別記錄成功、誤觸發、遗漏與成本，再決定能否進一步删減規則。
+
+## 本次發布驗收
+
+修復分支的 [GitHub Actions 驗證](https://github.com/ddmanyes/agent-skills-toolkit-zh-tw/actions/runs/34028866310) 已成功：12 個 POSIX 同步、12 個 DOCX、7 個維護來源比對、14 個 QA parser、8 個影像腳本案例，共 53 個測試，另含相容 overlay 與變更 Skill 檢查。
+
+本機 39 個主要 Skill 與 28 個相容入口共 67 個目錄、412 份受管檔案已逐檔 hash 核對，沒有不一致或 QA FAIL；未納入範圍的原有 Skill 檔案未改。從安裝位置重跑 DOCX 12、QA 14、影像 8 個測試全部通過。原始檔案備份與部署回執保留在本機。
+
+仍保留 104 項非阻擋 QA WARN：27 項原有跨客戶端 metadata、31 項可選 UI metadata、18 項 description 關鍵詞提示、28 項較長敘述。這些已人工檢視，不等同實際模型失敗，也不是以刪除有用內容處理的項目。
