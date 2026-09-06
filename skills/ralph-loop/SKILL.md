@@ -1,31 +1,20 @@
 ---
 name: ralph-loop
-description: 讓 AI 代理人根據 prd.json 進行自主循環開發，每一輪任務後標記進度並交由系統重啟 Context。
+description: 使用既有 prd.json 與明確啟動的 Ralph runner 逐輪完成故事；只有 runner 實際支援時才依其協定重啟 context。
 allowed-tools: Terminal, Read, Write, Edit, Glob, Grep
 ---
+# Ralph 自主循環
 
-# 超級能力：Ralph 自主循環開發 (Ralph Loop)
+此 Skill 是每輪工作協定，不會自行建立 runner、排程或重啟對話。採用現有 runner 的結束格式；沒有 runner 時，在当前任務依序執行已授權故事，並清楚回報狀態。
 
-你現在是一個「任務自動化循環代理人」。你的目標是讀取專案中的需求清單，並依序完成所有尚未通過（passed）的使用者故事。
+1. 讀適用專案指示、prd.json、既有 progress.txt 與相關程式。延續可用的對話授權；檔案用於跨輪恢復，不能覆蓋使用者最新指示。
+2. 驗證 JSON 結構，依依賴挑選下一個尚未 passed 的故事；無依賴限制才用原順序。每輪聚焦一個故事，避免順手擴大範圍。
+3. 實作後執行該故事的 tests 與必要驗收；有失敗就定位、修復並重測相關部分。缺少環境或需外部決策時記錄原因，保留未完成狀態。
+4. 只有驗收實際通過才更新 status 為 passed；寫入前保留可恢復版本，寫入後重新解析 JSON。日誌記錄改動、檢查與下一步，避免重複抄錄。只在出現可重用且未記錄的慣例時更新專案指示。
+5. 全部故事通過、必要整體驗證完成且無未完成交付時，才输出 `<promise>COMPLETE</promise>`。部分通過不可發此訊號；是否結束本輪交由實際 runner 協定決定。
 
-## 核心規則 (Core Rules)
-1. **無狀態假設**：假設每一輪對話都是全新的。你不能依賴先前的對話記憶，所有的參考資信必須來自檔案（`prd.json`, `progress.txt`, `AGENTS.md`）。
-2. **單一任務聚焦**：每一輪循環只專注於處理 `prd.json` 中第一個狀態非 `"passed"` 的使用者故事。
-3. **完成宣告**：當所有任務皆已達成時，輸出 `<promise>COMPLETE</promise>`。
+## prd.json 範例
 
-## 執行流程 (Process)
-1. **讀取進度**：首先讀取 `prd.json`、`progress.txt` 與專案結構。
-2. **鎖定任務**：從 `prd.json` 的 `stories` 清單中找出下一個要執行的目標。
-3. **實作與驗證**：
-    - 根據描述撰寫實作程式碼。
-    - 執行該故事指定的 `tests` 清單。
-4. **狀態回寫**：
-    - 測試通過：將該故事的 `status` 修改為 `"passed"`。
-    - 追加日誌：在 `progress.txt` 紀錄本次改動。
-    - 學習心得：本輪產生可重用且尚未記錄的開發慣例時，才更新 `AGENTS.md`（或 `CLAUDE.md`）。
-5. **結束循環**：回報進度並結束本輪對話。
-
-## 檔案範例 (prd.json)
 ```json
 {
   "stories": [
@@ -37,8 +26,6 @@ allowed-tools: Terminal, Read, Write, Edit, Glob, Grep
     }
   ]
 }
-\```
+```
 
-## 輸出要求
-- 全程使用「繁體中文」回報執行進度。
-- 修改 JSON 檔案時須保證語法絕對正確，不可破壞結構。
+以繁體中文回報實際完成、失败原因與剩餘故事。原有資料、權限與 Git 發布限制持續適用。

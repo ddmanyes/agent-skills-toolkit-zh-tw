@@ -12,10 +12,10 @@ from pathlib import Path
 from typing import Iterable
 from urllib.parse import unquote
 
+import yaml
+
 
 VALID_NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-TOP_LEVEL_KEY = re.compile(r"^([A-Za-z0-9_-]+):(?:\s*(.*))?$")
-MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 BROAD_DESTRUCTIVE = re.compile(
     r"\brm\s+(?:-[A-Za-z]*r[A-Za-z]*f[A-Za-z]*|-[A-Za-z]*f[A-Za-z]*r[A-Za-z]*)\s+"
     r"(?:/|~(?:/|\s|$)|\$\{?HOME\}?\b)",
@@ -73,61 +73,138 @@ class Report:
         self.findings.append(Finding(severity, code, message, str(file), line))
 
 
-def _strip_yaml_scalar(value: str) -> str:
-    value = value.strip()
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
-        return value[1:-1]
-    return value
+class _UniqueKeyLoader(yaml.SafeLoader):
+    """Reject duplicate mapping keys instead of silently replacing metadata."""
+
+
+def _unique_mapping(loader, node, deep=False):
+    mapping = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        if not isinstance(key, str):
+            raise yaml.constructor.ConstructorError(
+                None, None, "metadata keys must be strings", key_node.start_mark
+            )
+        if key in mapping:
+            raise yaml.constructor.ConstructorError(
+                None, None, f"duplicate key: {key}", key_node.start_mark
+            )
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+_UniqueKeyLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _unique_mapping
+)
 
 
 def _skill_dir(target: Path) -> Path:
-    if target.name == "SKILL.md":
-        return target.parent
-    return target
+    return target.parent if target.name == "SKILL.md" else target
 
 
-def _frontmatter(lines: list[str]) -> tuple[dict[str, str], int, str | None]:
+def _frontmatter(lines: list[str]) -> tuple[dict, int, str | None]:
     if not lines or lines[0].strip() != "---":
         return {}, 0, "SKILL.md must start with YAML frontmatter."
-
     closing = next(
-        (index for index, line in enumerate(lines[1:], start=1) if line.strip() == "---"),
-        None,
+        (i for i, line in enumerate(lines[1:], start=1) if line.strip() == "---"), None
     )
     if closing is None:
         return {}, 0, "YAML frontmatter has no closing delimiter."
-
-    metadata: dict[str, str] = {}
-    current_key: str | None = None
-    for line in lines[1:closing]:
-        match = TOP_LEVEL_KEY.match(line)
-        if match:
-            current_key = match.group(1)
-            metadata[current_key] = _strip_yaml_scalar(match.group(2) or "")
-        elif current_key and line.startswith((" ", "\t")):
-            metadata[current_key] = f"{metadata[current_key]} {line.strip()}".strip()
-        elif line.strip() and not line.lstrip().startswith("#"):
-            return metadata, closing, f"Cannot parse frontmatter line: {line.strip()}"
+    try:
+        metadata = yaml.load("\n".join(lines[1:closing]), Loader=_UniqueKeyLoader)
+    except yaml.YAMLError as exc:
+        return {}, closing, f"Invalid YAML frontmatter: {exc}"
+    if not isinstance(metadata, dict):
+        return {}, closing, "YAML frontmatter must be a mapping."
     return metadata, closing, None
 
 
+def _markdown_regions(body: str) -> Iterable[tuple[str, bool]]:
+    """Return prose and executable fences; generic example fences are excluded."""
+    fence = None
+    executable = False
+    shell_languages = {"bash", "sh", "shell", "zsh", "powershell", "ps1", "cmd", "bat"}
+    for line in body.splitlines():
+        marker = re.match(r"^\s*(`{3,}|~{3,})([^`~]*)$", line)
+        if marker:
+            chars, info = marker.groups()
+            if fence is None:
+                fence = chars
+                executable = info.strip().lower() in shell_languages
+            elif chars[0] == fence[0] and len(chars) >= len(fence) and not info.strip():
+                fence = None
+                executable = False
+            yield "", False
+        elif fence is None:
+            yield line, False
+        elif executable:
+            yield line, True
+        else:
+            yield "", False
+
+
+def _link_destinations(text: str) -> Iterable[str]:
+    """Read inline link destinations, including balanced parentheses and titles."""
+    for match in re.finditer(r"\[[^]\n]+\]\(", text):
+        start = match.end()
+        depth = 1
+        escaped = False
+        for index in range(start, len(text)):
+            char = text[index]
+            if escaped:
+                escaped = False
+                continue
+            if char == "\\":
+                escaped = True
+            elif char == "(":
+                depth += 1
+            elif char == ")":
+                depth -= 1
+                if depth == 0:
+                    destination = text[start:index].strip()
+                    if destination.startswith("<"):
+                        end = destination.find(">")
+                        if end != -1:
+                            yield destination[1:end]
+                    else:
+                        # A quoted trailing title is not part of the path.
+                        destination = re.sub(r"\s+[\"'].*[\"']$", "", destination)
+                        yield destination
+                    break
+
+
 def _local_references(body: str) -> Iterable[str]:
-    for match in MARKDOWN_LINK.finditer(body):
-        destination = match.group(1).strip()
-        if destination.startswith("<") and destination.endswith(">"):
-            destination = destination[1:-1]
-        destination = destination.split(" ", 1)[0]
-        destination = unquote(destination.split("#", 1)[0])
-        if not destination:
+    for line, executable in _markdown_regions(body):
+        if executable:
             continue
-        if re.match(r"^[a-z][a-z0-9+.-]*:", destination, re.IGNORECASE):
-            continue
-        if destination.startswith(("#", "/", "$", "~")):
-            continue
-        yield destination
+        # Inline code is an example or literal, never a Markdown link.
+        prose = re.sub(r"(`+).*?\1", "", line)
+        for destination in _link_destinations(prose):
+            destination = unquote(destination.split("#", 1)[0])
+            if not destination or re.match(r"^[a-z][a-z0-9+.-]*:", destination, re.I):
+                continue
+            if destination.startswith(("/", "$", "~")):
+                continue
+            yield re.sub(r"\\([() ])", r"\1", destination)
 
 
-def validate_skill(target: Path, max_body_lines: int = 500) -> Report:
+def _literal_script_references(body: str) -> Iterable[str]:
+    """Conservative hints: exact bundled script literals, not dynamic paths."""
+    pattern = re.compile(r"(?<![\w/\\$}])scripts/[A-Za-z0-9_./-]+\.(?:py|js|mjs|sh|ps1)\b")
+    for line, executable in _markdown_regions(body):
+        parts = [line] if executable else re.findall(r"`([^`]+)`", line)
+        for part in parts:
+            for match in pattern.finditer(part):
+                candidate = match.group()
+                # These are templates/globs or variable-built paths, not dependencies.
+                if ".." in candidate or any(c in part for c in "<>{}*"):
+                    continue
+                if candidate.endswith(("/example.py", "/your_script.py")):
+                    continue
+                yield candidate
+
+
+def validate_skill(target: Path, max_body_lines: int = 500, profile: str = "repository") -> Report:
     directory = _skill_dir(target.resolve())
     skill_file = directory / "SKILL.md"
     report = Report(skill=directory.name, path=str(directory))
@@ -147,19 +224,23 @@ def validate_skill(target: Path, max_body_lines: int = 500) -> Report:
     description = metadata.get("description", "")
     if not name:
         report.add("FAIL", "META002", "Frontmatter name is missing.", skill_file, 2)
+    elif not isinstance(name, str):
+        report.add("FAIL", "META002", "Frontmatter name must be a string.", skill_file, 2)
+        name = ""
     elif not VALID_NAME.fullmatch(name):
-        report.add("FAIL", "META003", "Skill name must use lowercase hyphen-case.", skill_file, 2)
+        report.add("FAIL" if profile == "repository" else "WARN", "META003",
+                   "Repository naming requires lowercase hyphen-case; runtime acceptance varies.", skill_file, 2)
     elif name != directory.name:
         report.add(
-            "FAIL",
+            "FAIL" if profile == "repository" else "WARN",
             "META004",
             f"Skill name '{name}' does not match directory '{directory.name}'.",
             skill_file,
             2,
         )
 
-    if not description or description in {">", "|"}:
-        report.add("FAIL", "META005", "Frontmatter description is missing.", skill_file, 3)
+    if not isinstance(description, str) or not description.strip():
+        report.add("FAIL", "META005", "Frontmatter description must be a non-empty string.", skill_file, 3)
     elif not re.search(
         r"\buse (?:when|whenever|for)\b|當|用於|適用",
         description,
@@ -199,17 +280,23 @@ def validate_skill(target: Path, max_body_lines: int = 500) -> Report:
         report.passed.append(f"Skill body is within the {max_body_lines}-line limit.")
 
     missing_refs: list[str] = []
-    for reference in sorted(set(_local_references(body))):
-        if not (directory / reference).exists():
-            missing_refs.append(reference)
-            report.add(
-                "FAIL",
-                "REF001",
-                f"Referenced local path does not exist: {reference}",
-                skill_file,
-            )
+    # Referenced Markdown can contain dependencies omitted from the entry point.
+    markdown_files = [skill_file, *sorted(directory.glob("references/**/*.md"))]
+    for document in markdown_files:
+        document_body = body if document == skill_file else document.read_text(encoding="utf-8")
+        for reference in sorted(set(_local_references(document_body))):
+            if not (document.parent / reference).exists():
+                missing_refs.append(reference)
+                report.add("FAIL", "REF001", f"Referenced local path does not exist: {reference}", document)
+        for reference in sorted(set(_literal_script_references(document_body))):
+            if not (directory / reference).is_file():
+                report.add(
+                    "WARN", "REF002",
+                    f"Script literal is missing: {reference}. Confirm whether it is a bundled dependency or an example/output.",
+                    document,
+                )
     if not missing_refs:
-        report.passed.append("All local Markdown references exist.")
+        report.passed.append("All checked local Markdown references exist (code examples excluded).")
 
     destructive_match = BROAD_DESTRUCTIVE.search(text)
     if destructive_match:
@@ -316,9 +403,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--format", choices=("text", "json"), default="text")
     parser.add_argument("--warnings-as-errors", action="store_true")
     parser.add_argument("--max-body-lines", type=int, default=500)
+    parser.add_argument("--profile", choices=("repository", "runtime"), default="repository",
+                        help="repository enforces local naming; runtime reports naming portability warnings")
     args = parser.parse_args(argv)
 
-    reports = [validate_skill(target, args.max_body_lines) for target in args.targets]
+    reports = [validate_skill(target, args.max_body_lines, args.profile) for target in args.targets]
     if args.format == "json":
         print(_render_json(reports))
     else:

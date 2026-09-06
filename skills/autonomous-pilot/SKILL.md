@@ -1,30 +1,20 @@
 ---
 name: autonomous-pilot
-description: Fully authorized autonomous execution agent for plan fulfillment with checkpoint logging.
+description: 依已授權的實作計畫持續執行、驗證與記錄可恢復檢查點；適用於使用者要求自主完成多步驟工作。
 allowed-tools: Terminal, Read, Write, Edit, Glob, Grep
 ---
+# Autonomous Pilot
+授權來自使用者與目前執行環境，本 Skill 不授予額外檔案、憑證、發布或系統操作權限。
 
-# Autonomous Pilot & Logger
+## 執行
+1. 讀取使用者指定的計畫；未指定時沿用現有 IMPLEMENTATION_PLAN.md 或 task_plan.md。先確認目標、允許的變更與驗收條件，不建立第二份重複計畫。
+2. 記錄 Git 分支、HEAD 與既有未提交變更。非 Git 專案使用檔案副本作復原點。
+3. 執行下一個未完成項目。專案使用 uv 時依專案指示以 uv run 執行 Python。
+4. 執行該項目的必要檢查，修復本次變更造成的失敗，再重跑受影響檢查。既有失敗要分清來源；只有缺少必要資訊、超出授權或無法安全繼續時才停下。
+5. 驗證成功後更新計畫狀態，於 execution_trace.md 記錄時間、完成內容、檢查結果及可用的 Git hash／備份位置。按有意義的子任務記錄，不逐次檔案操作寫日誌。
 
-You are a fully authorized autonomous execution agent. Your mission is to complete the tasks defined in the implementation plan independently and maintain a recoverable execution trace.
-
-## 1. Execution Permissions (邏輯授權)
-- **Full Authorization**: You have permission to create, modify, update, and execute `.py` or any project files.
-- **Silent Mode**: Do not stop for "Accept" or "Confirm" prompts for file-system operations unless a critical logical conflict occurs.
-- **Environment Awareness**: If a `uv.lock` or `pyproject.toml` is detected, always execute Python scripts via `uv run` to ensure environment portability across devices.
-
-## 2. Plan Synchronization (計畫同步)
-- **Real-time Update**: After completing each sub-task, you must immediately update the corresponding status in `IMPLEMENTATION_PLAN.md` (e.g., change `[ ]` to `[x]`).
-
-## 3. 可點擊式日誌規範 (Execution Trace)
-每次完成檔案操作或子任務後，必須在 `execution_trace.md` 中新增一筆繁體中文紀錄。
-
-**日誌格式規範**:
-- `[時間戳記] - 步驟: {任務名稱} | 狀態: ✅ 完成`
-- **恢復連結**: 使用 Markdown 虛擬連結格式。
-  `[🔄 點擊恢復至此階段](command:antigravity.restore?{"hash":"{git_hash}","step":"{step_name}"})`
-
-## 4. Operational Logic (執行邏輯)
-- **Pre-check**: Automatically detect current Git status before starting any task.
-- **Checkpointing**: Perform `git add .` and `git commit -m "Auto-Pilot: [Step Name]"` after every successful sub-task completion to create a recovery point.
-- **Post-task Summary**: Use Traditional Chinese to summarize what was performed in the current turn.
+## 檢查點與交付
+- 使用者要求提交或計畫已授權提交時，只暫存本次修改的明確路徑；先檢查 staged diff，避免納入使用者或其他任務的變更。提交失敗不得記成成功。
+- 恢復資訊使用實際 commit hash 與檔案位置；只有環境確認支援時才加編輯器專屬恢復連結。
+- 已授權的本機執行、修正與檢查不逐步重問。發布、破壞性動作與目標範圍仍受原始授權限制。
+- 完成代表計畫範圍已處理、必要檢查通過、未解決限制已列明。用繁體中文回報變更、證據與復原點。

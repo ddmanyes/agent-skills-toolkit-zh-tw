@@ -5,13 +5,30 @@ Validator for tracked changes in Word documents.
 import subprocess
 import tempfile
 import zipfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
 class RedliningValidator:
     """Validator for tracked changes in Word documents."""
 
-    def __init__(self, unpacked_dir, original_docx, verbose=False):
+    def __init__(self, unpacked_dir, original_docx, verbose=False, *, author=None, authors=None):
+        """Validate edits for an explicit author or set of authors.
+
+        Legacy callers default to Claude and Codex. Document passes its own author
+        so edits by every other author must remain intact. This validates tracked
+        text edits; schema/layout validation remains a separate responsibility.
+        """
+        if author is not None and authors is not None:
+            raise ValueError("Specify author or authors, not both")
+        selected = (author,) if author is not None else authors
+        if selected is None:
+            selected = ("Claude", "Codex")
+        if isinstance(selected, str):
+            selected = (selected,)
+        self.authors = frozenset(selected)
+        if not self.authors or any(not isinstance(value, str) or not value.strip() for value in self.authors):
+            raise ValueError("Tracked-change authors must be non-empty strings")
         self.unpacked_dir = Path(unpacked_dir)
         self.original_docx = Path(original_docx)
         self.verbose = verbose
@@ -20,101 +37,68 @@ class RedliningValidator:
         }
 
     def validate(self):
-        """Main validation method that returns True if valid, False otherwise."""
-        # Verify unpacked directory exists and has correct structure
+        """Reject this operation's tracked edits and compare against the baseline.
+
+        Always compare both documents, even when no selected-author edits exist:
+        an untracked change or an unknown author must not produce a false pass.
+        """
         modified_file = self.unpacked_dir / "word" / "document.xml"
-        if not modified_file.exists():
-            print(f"FAILED - Modified document.xml not found at {modified_file}")
+        try:
+            modified_root = ET.parse(modified_file).getroot()
+            # Read only the required ZIP member; never extract user-supplied paths.
+            with zipfile.ZipFile(self.original_docx, "r") as archive:
+                original_root = ET.fromstring(archive.read("word/document.xml"))
+        except (OSError, KeyError, zipfile.BadZipFile, ET.ParseError) as exc:
+            print(f"FAILED - Cannot read document XML: {exc}")
             return False
 
-        # First, check if there are any tracked changes by Claude to validate
-        try:
-            import xml.etree.ElementTree as ET
+        author_attr = f"{{{self.namespaces['w']}}}author"
+        for root in (original_root, modified_root):
+            for element in root.iter():
+                local_tag = element.tag.rsplit("}", 1)[-1]
+                if element.get(author_attr) in self.authors and (
+                    local_tag.endswith("PrChange") or local_tag in {"moveFrom", "moveTo"}
+                ):
+                    print(f"FAILED - Tracked {local_tag} changes require a separate validator; text-edit validation is insufficient")
+                    return False
 
-            tree = ET.parse(modified_file)
-            root = tree.getroot()
+        self._remove_authored_tracked_changes(original_root)
+        self._remove_authored_tracked_changes(modified_root)
 
-            # Check for w:del or w:ins tags authored by Claude
-            del_elements = root.findall(".//w:del", self.namespaces)
-            ins_elements = root.findall(".//w:ins", self.namespaces)
+        # Text-only comparison misses deletion text and altered author/id metadata.
+        # Preserve every remaining author's revision, allowing our rejected nested edits.
+        if self._other_author_revisions(original_root) != self._other_author_revisions(modified_root):
+            print("FAILED - Another author's tracked revision was added, removed, or modified")
+            return False
 
-            # Filter to only include changes by Claude
-            claude_del_elements = [
-                elem
-                for elem in del_elements
-                if elem.get(f"{{{self.namespaces['w']}}}author") == "Claude"
-            ]
-            claude_ins_elements = [
-                elem
-                for elem in ins_elements
-                if elem.get(f"{{{self.namespaces['w']}}}author") == "Claude"
-            ]
+        modified_text = self._extract_text_content(modified_root)
+        original_text = self._extract_text_content(original_root)
+        if modified_text != original_text:
+            print(self._generate_detailed_diff(original_text, modified_text))
+            return False
+        if self.verbose:
+            print("PASSED - Tracked text edits verified for: " + ", ".join(sorted(self.authors)))
+        return True
 
-            # Redlining validation is only needed if tracked changes by Claude have been used.
-            if not claude_del_elements and not claude_ins_elements:
-                if self.verbose:
-                    print("PASSED - No tracked changes by Claude found.")
-                return True
+    def _other_author_revisions(self, root):
+        w = self.namespaces["w"]
+        revision_tags = {f"{{{w}}}ins", f"{{{w}}}del"}
+        text_tags = {f"{{{w}}}t", f"{{{w}}}delText", f"{{{w}}}instrText"}
 
-        except Exception:
-            # If we can't parse the XML, continue with full validation
-            pass
+        def signature(element):
+            return (
+                element.tag,
+                tuple(sorted(element.attrib.items())),
+                element.text if element.tag in text_tags else (element.text or "").strip(),
+                tuple(signature(child) for child in element),
+            )
 
-        # Create temporary directory for unpacking original docx
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_path = Path(temp_dir)
-
-            # Unpack original docx
-            try:
-                with zipfile.ZipFile(self.original_docx, "r") as zip_ref:
-                    zip_ref.extractall(temp_path)
-            except Exception as e:
-                print(f"FAILED - Error unpacking original docx: {e}")
-                return False
-
-            original_file = temp_path / "word" / "document.xml"
-            if not original_file.exists():
-                print(
-                    f"FAILED - Original document.xml not found in {self.original_docx}"
-                )
-                return False
-
-            # Parse both XML files using xml.etree.ElementTree for redlining validation
-            try:
-                import xml.etree.ElementTree as ET
-
-                modified_tree = ET.parse(modified_file)
-                modified_root = modified_tree.getroot()
-                original_tree = ET.parse(original_file)
-                original_root = original_tree.getroot()
-            except ET.ParseError as e:
-                print(f"FAILED - Error parsing XML files: {e}")
-                return False
-
-            # Remove Claude's tracked changes from both documents
-            self._remove_claude_tracked_changes(original_root)
-            self._remove_claude_tracked_changes(modified_root)
-
-            # Extract and compare text content
-            modified_text = self._extract_text_content(modified_root)
-            original_text = self._extract_text_content(original_root)
-
-            if modified_text != original_text:
-                # Show detailed character-level differences for each paragraph
-                error_message = self._generate_detailed_diff(
-                    original_text, modified_text
-                )
-                print(error_message)
-                return False
-
-            if self.verbose:
-                print("PASSED - All changes by Claude are properly tracked")
-            return True
+        return [signature(element) for element in root.iter() if element.tag in revision_tags]
 
     def _generate_detailed_diff(self, original_text, modified_text):
         """Generate detailed word-level differences using git word diff."""
         error_parts = [
-            "FAILED - Document text doesn't match after removing Claude's tracked changes",
+            "FAILED - Document text does not match after rejecting the selected authors' tracked changes",
             "",
             "Likely causes:",
             "  1. Modified text inside another author's <w:ins> or <w:del> tags",
@@ -214,8 +198,8 @@ class RedliningValidator:
 
         return None
 
-    def _remove_claude_tracked_changes(self, root):
-        """Remove tracked changes authored by Claude from the XML root."""
+    def _remove_authored_tracked_changes(self, root):
+        """Reject insertions and restore deletions for the selected authors."""
         ins_tag = f"{{{self.namespaces['w']}}}ins"
         del_tag = f"{{{self.namespaces['w']}}}del"
         author_attr = f"{{{self.namespaces['w']}}}author"
@@ -224,19 +208,19 @@ class RedliningValidator:
         for parent in root.iter():
             to_remove = []
             for child in parent:
-                if child.tag == ins_tag and child.get(author_attr) == "Claude":
+                if child.tag == ins_tag and child.get(author_attr) in self.authors:
                     to_remove.append(child)
             for elem in to_remove:
                 parent.remove(elem)
 
-        # Unwrap content in w:del elements where author is "Claude"
+        # Restore deleted content only for the selected authors
         deltext_tag = f"{{{self.namespaces['w']}}}delText"
         t_tag = f"{{{self.namespaces['w']}}}t"
 
         for parent in root.iter():
             to_process = []
             for child in parent:
-                if child.tag == del_tag and child.get(author_attr) == "Claude":
+                if child.tag == del_tag and child.get(author_attr) in self.authors:
                     to_process.append((child, list(parent).index(child)))
 
             # Process in reverse order to maintain indices

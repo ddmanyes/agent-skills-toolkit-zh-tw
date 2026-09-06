@@ -5,10 +5,17 @@
 Fail a Skill when any of these conditions is true:
 
 - `SKILL.md` is missing or its frontmatter is malformed.
-- `name` is missing, invalid, or different from the Skill directory name.
+- `name` or `description` is not a non-empty string.
+- In the `repository` profile, `name` violates the lowercase hyphen-case convention or differs from its directory. The `runtime` profile reports naming portability warnings instead.
 - `description` is missing.
-- A local Markdown reference points to a missing file.
+- A local Markdown link outside a code example points to a missing file. Check links in `SKILL.md` and `references/` relative to the containing document.
 - An instruction contains a broad destructive command such as `rm -rf /`, `rm -rf ~`, or `rm -rf $HOME`.
+
+Parse YAML with PyYAML and reject malformed input or duplicate keys; a hand-written scalar parser is insufficient.
+Keep angle-bracket destinations, escaped spaces, URL-encoded spaces, and balanced parentheses intact when checking Markdown links.
+Review `REF002` script-literal warnings: establish whether a path names an installed dependency, an example, or an output before treating it as a confirmed missing resource.
+Executable shell fences can contain script hints; generic code examples and variable-built paths are not evidence of required files.
+Do not claim complete dependency coverage: inspect imports, scripts, runtime settings, and services separately when the edited workflow depends on them.
 
 Treat product-specific frontmatter keys as portability warnings, not failures. Claude, Codex, and other runtimes do not accept exactly the same metadata.
 
@@ -35,7 +42,7 @@ For Traditional Chinese instructions, apply the same contract principles without
 
 ## Semantic-preservation review
 
-Compare source and revision before accepting a rewrite. Reject the revision if it:
+Compare source and revision before accepting a rewrite. Reject unapproved or accidental semantic changes; a repair explicitly within the user-approved scope may intentionally change the affected rule. Review whether it:
 
 - changes or removes a number, path, parameter, identifier, or quoted literal;
 - removes a negative, exception, precondition, or authorization boundary;
@@ -44,6 +51,8 @@ Compare source and revision before accepting a rewrite. Reject the revision if i
 - changes success, failure, retry, or recovery behavior;
 - invents a cause, mechanism, frequency, guarantee, or recommendation;
 - narrows or expands the original scope without authorization.
+
+For shared Skills, preserve knowledge and guardrails needed by Astra, Sol, or Luna until tests justify a change. Do not infer cross-model effects from one model's static review.
 
 Shorter text is not automatically better. Stop rewriting when the contract is unambiguous and complete.
 

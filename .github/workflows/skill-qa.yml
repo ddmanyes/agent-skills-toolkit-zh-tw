@@ -5,11 +5,21 @@ on:
     paths:
       - "skills/**"
       - "disabled_skills/**"
+      - "compatibility_skills/**"
+      - "scripts/sync-local-skills.*"
+      - "scripts/tests/**"
+      - "scripts/transitional-skills.txt"
+      - "scripts/check-skill-consistency.py"
       - ".github/workflows/skill-qa.yml"
   push:
     paths:
       - "skills/**"
       - "disabled_skills/**"
+      - "compatibility_skills/**"
+      - "scripts/sync-local-skills.*"
+      - "scripts/tests/**"
+      - "scripts/transitional-skills.txt"
+      - "scripts/check-skill-consistency.py"
       - ".github/workflows/skill-qa.yml"
 
 permissions:
@@ -25,8 +35,28 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install validation dependencies
+        run: python3 -m pip install "PyYAML>=6,<7" "lxml>=5,<7" "defusedxml>=0.7,<1"
+      - name: Ensure rsync is available for POSIX sync tests
+        shell: bash
+        run: |
+          if ! command -v rsync >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes rsync
+          fi
+          command -v rsync
+      - name: Run POSIX Skill sync integration tests
+        run: python3 scripts/tests/test_sync_local_skills.py BashSyncTests
+      - name: Run DOCX tracked-edit regression tests
+        run: python3 skills/docx/tests/test_redlining.py
+      - name: Test mirror ownership reporting
+        run: python3 scripts/tests/test_check_skill_consistency.py
       - name: Run validator tests
         run: python3 skills/skill-qa-gate/scripts/test_lint_skill.py
+      - name: Validate compatibility overlays in a shared install root
+        run: python3 compatibility_skills/tests/validate_overlays.py
+      - name: Run image-to-prompt regression tests
+        run: python3 compatibility_skills/image-to-prompt/tests/test_generate_prompt.py
       - name: Find and validate changed Skills
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}

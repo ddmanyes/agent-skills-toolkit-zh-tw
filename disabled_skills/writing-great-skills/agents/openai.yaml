@@ -1,0 +1,6 @@
+interface:
+  display_name: "writing-great-skills"
+  short_description: "Explicitly invoked reference and review workflow"
+  default_prompt: "Use $writing-great-skills for the requested workflow."
+policy:
+  allow_implicit_invocation: false

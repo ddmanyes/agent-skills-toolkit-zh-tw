@@ -1,35 +1,58 @@
 ---
 name: frontend-design
-description: 使用最高設計標準建立卓越的生產等級前端介面。結合 UI-UX Pro Max 框架。
+description: Design and implement web components, pages, and applications, or refine an existing web UI. Use for frontend layout, typography, color, motion, and interaction work while respecting the project's brand, accessibility, and technical constraints.
+license: Complete terms in LICENSE.txt
 allowed-tools: Terminal, Read, Write, Edit, Glob, Grep
 ---
 
-# 進階前端設計大腦 (Advanced Frontend Design) - Pro Max 版
+# Frontend Design
 
-你現在擁有專業設計師的眼光。在建立任何 UI 之前，你必須遵循 UI-UX Pro Max 的 10 個優先等級規範。
+Implement working frontend code with a deliberate visual direction. Preserve the user's requirements and an existing project's design system, framework, and conventions.
 
-## 1. 設計優先等級 (Priority Hierarchy)
-1. **無障礙 (A11y)**: 對比度 > 4.5:1, Aria-labels, 鍵盤導航。
-2. **觸控與互動**: 點擊區域至少 44x44pt，互動延遲 < 100ms。
-3. **效能 (CLS)**: 預留加載空間，累計版面位移 (CLS) 必須 < 0.1。
-4. **風格一致性**: 選擇明確風格（如 Bauhaus, Glassmorphism），嚴禁雜亂。
-5. **響應式佈局**: Mobile-first, 系統化斷點, 嚴禁水平滾動。
+## Design thinking
 
-## 2. 核心風格手冊 (Styles)
-- **Bento Grid (便當網格)**: 使用結構明確的非對稱網格展示內容。
-- **Glassmorphism (玻璃擬態)**: 背景模糊 (Backdrop-blur) > 10px，帶有細微邊框與透明度。
-- **Modern Minimalist**: 大量留白、字體行高 1.6-1.75、柔和的陰影層次。
+Establish the interface's purpose, audience, constraints, and defining visual idea from the brief.
+Ask only about missing choices that materially change the result.
+A focused edit can retain the current direction; a new design can explore a stronger one.
 
-## 3. 技術棧最佳實踐 (Next.js/React)
-- **Component Colocation**: 將樣式、組件與測試檔案放在一起。
-- **Modern Standards**: 優先使用 Tailwind CSS, Lucide Icons, 及 Radix UI / shadcn/ui 元件。
+Choose a coherent tone: restrained minimalism, editorial, playful, industrial, organic, luxury, brutalist, geometric, or another direction grounded in the content. The goal is intentional execution; every interface need not choose an extreme style.
 
-## 4. 執行流程
-1. **設計對準**: 根據需求選擇最合適的風格。
-2. **結構規劃**: 使用語義化 HTML5。
-3. **微動畫**: 加入 150-300ms 的過渡效果，增強手感。
-4. **自檢**: 對照 10 個優先等級進行最終審查。
+## Five design priorities
 
-## 輸出要求
-- 全程使用「繁體中文」回饋。
-- 若使用者要求「漂亮」，你應自動套用 Pro Max 等級的視覺規範。
+1. **Accessibility:** use semantic HTML, meaningful labels, visible focus, and keyboard navigation. Target at least 4.5:1 contrast for ordinary text. Preserve readable glyph coverage and honor reduced-motion preferences.
+2. **Interaction:** provide clear states and usable controls. The existing Pro Max guidance targets 44×44 pt touch areas and under 100 ms interaction delay; treat them as design targets and measure before claiming they are met.
+3. **Layout stability:** reserve space for loading media and components. Target CLS below 0.1; a source review alone does not establish a measured score.
+4. **Consistency:** apply a coherent palette, hierarchy, spacing, and component language. Fit new work into the existing brand unless a redesign is requested.
+5. **Responsive layout:** use systematic breakpoints and test narrow and wide views. Avoid unintended horizontal overflow; intentional horizontal regions need usable navigation.
+
+## Aesthetic techniques
+
+- **Typography:** choose readable fonts with character when the brief allows.
+  A distinctive display face can pair with a restrained body face.
+  Existing brand fonts, Inter, Arial, system fonts, or accessible fallbacks are valid when they serve the project; do not replace them merely to avoid a common choice.
+- **Color and theme:** use consistent tokens or CSS variables. Choose a dominant palette and purposeful accents; balance contrast and content rather than repeating a default gradient.
+- **Motion:** use CSS transitions for simple interfaces and an existing motion library when it fits the stack.
+  A coordinated reveal or a useful state transition can be enough.
+  The Pro Max reference suggests 150–300 ms transitions; make motion optional where it does not aid interaction and respect reduced motion.
+- **Composition:** choose intentional spacing, asymmetry, visual density, or negative space. Keep overlaps and grid-breaking effects clear of required text, focus indicators, and controls.
+- **Depth and detail:** contextual textures, borders, shadows, gradients, and layered transparency can support the visual idea. Use them selectively; a plain background is valid when it gives the content clarity.
+
+Bento grids can organize asymmetrical content.
+Glassmorphism can use backdrop blur above 10 px with a subtle border, provided contrast remains legible.
+Modern Minimalist work can use generous space, line height 1.6–1.75, and restrained shadows.
+These are available styles, not requirements for every interface.
+
+## Implementation and completion
+
+Use the project's stack.
+For a new React or Next.js project, Tailwind, Lucide, Radix UI, and shadcn/ui are available choices; avoid introducing them into an existing project without a concrete need.
+Co-locate components, styles, and relevant tests according to repository conventions.
+
+Match implementation complexity to the brief: dense visual work may need more structure, while a restrained interface benefits from precise spacing and typography. Deliver a functioning page or component, not only a mockup.
+
+Run the project's required build or checks, render the changed view, inspect narrow and wide layouts, and exercise the primary interaction and keyboard path.
+Fix observed failures and rerun affected checks.
+A low-risk visual edit needs focused verification, not a new test suite that mirrors the change.
+Report unavailable checks and unmeasured performance targets accurately.
+
+Keep edits within the authorized project, preserve unrelated user changes, and retain a recoverable copy before replacing user files. External publication requires user authorization. Report in Traditional Chinese unless the user requests another language.

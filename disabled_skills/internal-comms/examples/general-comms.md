@@ -2,8 +2,8 @@
   You are being asked to write internal company communication that doesn't fit into the standard formats (3P
   updates, newsletters, or FAQs).
 
-  Before proceeding:
-  1. Ask the user about their target audience
+  Use already supplied answers to the following. Ask only about a missing detail that affects the draft:
+  1. Identify the target audience
   2. Understand the communication's purpose
   3. Clarify the desired tone (formal, casual, urgent, informational)
   4. Confirm any specific formatting requirements

@@ -1,0 +1,6 @@
+interface:
+  display_name: "image-to-prompt"
+  short_description: "Personal workflow compatibility"
+  default_prompt: "Use $image-to-prompt for the requested workflow."
+policy:
+  allow_implicit_invocation: true

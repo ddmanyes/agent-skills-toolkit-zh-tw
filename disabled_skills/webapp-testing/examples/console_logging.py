@@ -1,4 +1,6 @@
-from playwright.sync_api import sync_playwright
+from pathlib import Path
+
+from playwright.sync_api import expect, sync_playwright
 
 # Example: Capturing console logs during browser automation
 
@@ -18,18 +20,22 @@ with sync_playwright() as p:
     page.on("console", handle_console_message)
 
     # Navigate to page
-    page.goto(url)
-    page.wait_for_load_state('networkidle')
+    page.goto(url, wait_until='domcontentloaded')
+    # Replace these locators with elements observed in the target app.
+    dashboard = page.get_by_role('link', name='Dashboard', exact=True)
+    expect(dashboard).to_be_visible()
 
     # Interact with the page (triggers console logs)
-    page.click('text=Dashboard')
-    page.wait_for_timeout(1000)
+    dashboard.click()
+    expect(page.get_by_role('heading', name='Dashboard', exact=True)).to_be_visible()
 
     browser.close()
 
 # Save console logs to file
-with open('/mnt/user-data/outputs/console.log', 'w') as f:
-    f.write('\n'.join(console_logs))
+output_dir = Path('test-artifacts')
+output_dir.mkdir(exist_ok=True)
+output_path = output_dir / 'console.log'
+output_path.write_text('\n'.join(console_logs), encoding='utf-8')
 
 print(f"\nCaptured {len(console_logs)} console messages")
-print(f"Logs saved to: /mnt/user-data/outputs/console.log")
+print(f"Logs saved to: {output_path.resolve()}")

@@ -1,6 +1,6 @@
 # Office Open XML Technical Reference for PowerPoint
 
-**Important: Read this entire document before starting.** Critical XML schema rules and formatting requirements are covered throughout. Incorrect implementation can create invalid PPTX files that PowerPoint cannot open.
+Read the shared schema/relationship rules, then sections for elements being edited. Preserve those constraints and validate the resulting package; an unrelated feature section is not a prerequisite for a small edit.
 
 ## Technical Guidelines
 

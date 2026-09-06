@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "installation": "Merge each named directory into the existing shared skill root; do not replace whole directories.",
+  "entries": [
+    {
+      "name": "source-command-autonomous-pilot",
+      "legacy_command": "autonomous-pilot",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "autonomous-pilot",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "d0a53c72e643c700770a4522afe42d84ff3cf57b5f358cba8db2cdca2e8cfd48"
+    },
+    {
+      "name": "source-command-checkpoint-manager",
+      "legacy_command": "checkpoint-manager",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "checkpoint-manager",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "3a5ad46809723d3e8fb0f0794d0f9127f079f9d871c154eee848474774ae366a"
+    },
+    {
+      "name": "source-command-code-review",
+      "legacy_command": "code-review",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-code-review",
+      "comparison": "distinct-workflow-adapter",
+      "evidence": "舊命令是提交前自檢和回應審查意見，正本是 Standards/Spec findings；保留舊工作分支而非宣稱完全同用途。",
+      "source_skill_sha256": "fff69e7e97ff832d759c82171e95b17429490d08456d53744eda2c66fc407615"
+    },
+    {
+      "name": "source-command-code-simplifier",
+      "legacy_command": "code-simplifier",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "code-simplifier",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "77cf42113bc282b1015483698aa231263b638e04576d6fdbdd69084ba3b2e962"
+    },
+    {
+      "name": "source-command-docx-docx-js",
+      "legacy_command": "docx-docx-js",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "docx",
+      "comparison": "exact-reference-copy",
+      "evidence": "原正文完整複製 docx/docx-js.md；改成有條件讀取同一參考與正本驗收。",
+      "source_skill_sha256": "4cb8479dd4dee952803902c667117e5e5e713fbd28be60f9988407a48f18766f"
+    },
+    {
+      "name": "source-command-docx-ooxml",
+      "legacy_command": "docx-ooxml",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "docx",
+      "comparison": "author-adapter",
+      "evidence": "技術參考差異為 Claude→Codex 修訂作者與說明；保留明確作者參數，重用已修正驗證器。",
+      "source_skill_sha256": "0550584b2bc559b09ded82f1b0587bad58fa496d636ddba4f50c01d7f5d339f7"
+    },
+    {
+      "name": "source-command-docx-skill",
+      "legacy_command": "docx-SKILL",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "docx",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "1007768068f137ef675707d48d8924798c1b1a7d5de9a911c9c8c5939e2b5c7d"
+    },
+    {
+      "name": "source-command-pdf-forms",
+      "legacy_command": "pdf-forms",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "pdf",
+      "comparison": "exact-reference-copy",
+      "evidence": "原正文完整複製 pdf/forms.md；改成有條件讀取同一參考與正本驗收。",
+      "source_skill_sha256": "a5c2522eee21d35680bee5714a37251561d285e40fa907406924ca65cd75471f"
+    },
+    {
+      "name": "source-command-pdf-skill",
+      "legacy_command": "pdf-SKILL",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "pdf",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "39a054ff37ab220cb6ca4709f08d44ddf134b599e46fd1ed244a7592b426a307"
+    },
+    {
+      "name": "source-command-planning-with-files",
+      "legacy_command": "planning-with-files",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "planning-with-files",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "74e835ade429d4e8a25e41bf7fdc7a74569b5ad5e09eefcf9346306be843950d"
+    },
+    {
+      "name": "source-command-pptx-ooxml",
+      "legacy_command": "pptx-ooxml",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "pptx",
+      "comparison": "exact-reference-copy",
+      "evidence": "原正文完整複製 pptx/ooxml.md；改成有條件讀取同一參考與正本驗收。",
+      "source_skill_sha256": "005dfde76b4e6c414e907730c9d9fad1a7a36998d451e0b248fa06a0fe2f8406"
+    },
+    {
+      "name": "source-command-pptx-skill",
+      "legacy_command": "pptx-SKILL",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "pptx",
+      "comparison": "identity-text-adaptation",
+      "evidence": "已安裝版本的實質差異只有 Claude/Codex 稱呼；共用能力與流程。",
+      "source_skill_sha256": "00aac19d541e7b7200bfef52febd7ca8140594b5bdf2c0530d96cf277e9cbe78"
+    },
+    {
+      "name": "source-command-project-architect",
+      "legacy_command": "project-architect",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "project-architect",
+      "comparison": "client-adapter",
+      "evidence": "相同初始化流程，舊命令指定 AGENTS.md；保留 Codex 新專案預設，既有客戶端不強制搬移。",
+      "source_skill_sha256": "a5e9087419be2eaa8afef8981537e67b7a4be20da3689a8f2c45a718568c0af6"
+    },
+    {
+      "name": "source-command-ralph-loop",
+      "legacy_command": "ralph-loop",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "ralph-loop",
+      "comparison": "same-purpose",
+      "evidence": "舊命令將 AGENTS.md 重複列兩次且保留失效 fence；工作目的同為 prd.json 逐輪執行，導向已修正正本。",
+      "source_skill_sha256": "9ea9506df19271ba9b3f01b686e8094cc249ae36f11abd08841880fa6652d227"
+    },
+    {
+      "name": "source-command-revise-claude-md",
+      "legacy_command": "revise-claude-md",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": null,
+      "comparison": "distinct-session-workflow",
+      "evidence": "revise-claude-md 從本次會話萃取心得寫回 AGENTS.md；不同於整庫指示稽核，不強行合併。",
+      "source_skill_sha256": "cf30ff2756fafca450689c7629881b6f538b6bcf1f29d4371a0fd944fa139a86"
+    },
+    {
+      "name": "source-command-skill-architect",
+      "legacy_command": "skill-architect",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "skill-architect",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "23cac497fa80b33c8c37e7df01170f6b970922487a853c206ad55b7071709662"
+    },
+    {
+      "name": "source-command-skill-creator",
+      "legacy_command": "skill-creator",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "skill-creator",
+      "comparison": "identity-text-adaptation",
+      "evidence": "已安裝版本的實質差異只有 Claude/Codex 稱呼；共用能力與流程。",
+      "source_skill_sha256": "9f0f161a2a21efcea30a88cb1ad24aa66288e07368c8fdf37bb2fd8670f11441"
+    },
+    {
+      "name": "source-command-sp-brainstorming",
+      "legacy_command": "sp-brainstorming",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-brainstorming",
+      "comparison": "same-purpose",
+      "evidence": "舊命令是較早設計訪談版，正本增加事實自行查證與邊界情境；同一設計釐清用途，保留按需求選擇 1–2 個方案而不固定訪談輪數。",
+      "source_skill_sha256": "ac615f0922b341bf7342d7582fe0d08080ba3bf86f682d587db1b8c6e440c3bc"
+    },
+    {
+      "name": "source-command-sp-executing-plans",
+      "legacy_command": "sp-executing-plans",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-executing-plans",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "ea56e09b797c7e31489a4ea98f0c624d5785fca72f9ff4a729efcfdf260042ed"
+    },
+    {
+      "name": "source-command-sp-fix-test",
+      "legacy_command": "sp-fix-test",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-fix-test",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "f348330b29f6a4f4ea53e9539bd61d87a670120b928d8e2e61a68d873806e236"
+    },
+    {
+      "name": "source-command-sp-git-worktrees",
+      "legacy_command": "sp-git-worktrees",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-git-worktrees",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "f89e269fd86abee05a764a130266aece30dafb6f426fc4cfa690e605de2f2f0b"
+    },
+    {
+      "name": "source-command-sp-learn-codebase",
+      "legacy_command": "sp-learn-codebase",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-learn-codebase",
+      "comparison": "project-instructions-adaptation",
+      "evidence": "舊命令把 CLAUDE.md 改成 AGENTS.md；保留依目前專案實際指示選擇的規則。",
+      "source_skill_sha256": "9540f473abe77188cbe35cdafea36c2a37117524a4836b6119f0bfe17b15aaf7"
+    },
+    {
+      "name": "source-command-sp-subagent-dev",
+      "legacy_command": "sp-subagent-dev",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-subagent-dev",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "67ad15eb4e91084c1011f089c9c8cbeecf30b265025eab94701beae7ce4cea70"
+    },
+    {
+      "name": "source-command-sp-writing-plans",
+      "legacy_command": "sp-writing-plans",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "sp-writing-plans",
+      "comparison": "project-instructions-adaptation",
+      "evidence": "舊命令把 CLAUDE.md 改成 AGENTS.md；保留依目前專案實際指示選擇的規則。",
+      "source_skill_sha256": "ffa5f9ebcadd9429a717c6a95d908af40a557446e7e370cb162985a46d92e764"
+    },
+    {
+      "name": "source-command-xlsx",
+      "legacy_command": "xlsx",
+      "mode": "overlay",
+      "manual_only": true,
+      "canonical": "xlsx",
+      "comparison": "exact-body-copy",
+      "evidence": "移除外層遷移標題及 BOM 後，正文與已安裝正本完全相同。",
+      "source_skill_sha256": "ce05318173898062cf7da11c50ec9c0b263fa117de8c76b35d2066a9721c1285"
+    },
+    {
+      "name": "image-to-prompt",
+      "mode": "self-contained-script-overlay",
+      "manual_only": false,
+      "canonical": null,
+      "source_skill_sha256": "ce9132d5d8532ddb7fca0885beaa5467af8739aabc0dd6f5c4616769dc1ce960",
+      "source_script_sha256": "010c0fc9cf009f3ad7b9cc3f41162e884f1e141f971d1b341e01c2cf6c96b79b"
+    },
+    {
+      "name": "notebooklm",
+      "mode": "requires-existing-install",
+      "manual_only": false,
+      "canonical": null,
+      "source_skill_sha256": "23a12d01edc02aa3a2cd06e0f9353f2ecd9e5a9fa725be93fe4d404d46bc4fd7",
+      "required_existing_files": [
+        "scripts/run.py",
+        "scripts/config.py",
+        "scripts/setup_environment.py",
+        "scripts/auth_manager.py",
+        "scripts/notebook_manager.py",
+        "scripts/ask_question.py",
+        "scripts/cleanup_manager.py",
+        "requirements.txt",
+        ".gitignore"
+      ]
+    },
+    {
+      "name": "session-snapshot",
+      "mode": "documentation-overlay",
+      "manual_only": false,
+      "canonical": null,
+      "source_skill_sha256": "8f5589d8ca19f6bbf6a17c3db82fb3c77bab08e801317ac31b7b3d02a55df3b5"
+    }
+  ]
+}

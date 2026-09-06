@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+data/
+browser_state/
+models/
+.env
+.env.*
+cookies.json
+auth_info.json
+state.json
+library.json

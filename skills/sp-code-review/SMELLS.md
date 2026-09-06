@@ -1,6 +1,6 @@
 # Code Smell 基線 (Fowler《Refactoring》ch.3)
 
-開 Standards sub-agent 時，把整份貼進它的 prompt——sub-agent 沒別的管道拿到它。
+Standards 審查使用本基線。子代理可讀共享檔案時傳入本文件路徑；無讀檔管道時附與範圍相關的必要原文，並確保有足夠上下文判斷。
 
 兩條約束：
 - **專案規範優先**：專案成文規範一律蓋過基線；基線與之衝突時，抑制該 smell。

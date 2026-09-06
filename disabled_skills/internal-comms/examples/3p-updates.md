@@ -4,7 +4,7 @@ You are being asked to write a 3P update. 3P updates stand for "Progress, Plans,
 3Ps can cover a team of any size, ranging all the way up to the entire company. The bigger the team, the less granular the tasks should be. For example, "mobile team" might have "shipped feature" or "fixed bugs," whereas the company might have really meaty 3Ps, like "hired 20 new people" or "closed 10 new deals." 
 
 They represent the work of the team across a time period, almost always one week. They include three sections:
-1) Progress: what the team has accomplished over the next time period. Focus mainly on things shipped, milestones achieved, tasks created, etc.
+1) Progress: what the team has accomplished over the covered time period. Focus mainly on things shipped, milestones achieved, tasks created, etc.
 2) Plans: what the team plans to do over the next time period. Focus on what things are top-of-mind, really high priority, etc. for the team.
 3) Problems: anything that is slowing the team down. This could be things like too few people, bugs or blockers that are preventing the team from moving forward, some deal that fell through, etc.
 
@@ -29,7 +29,7 @@ If you don't have access, you can ask the user for things they want to cover. Th
 
 ## Workflow
 
-1. **Clarify scope**: Confirm the team name and time period (usually past week for Progress/Problems, next
+1. **Clarify scope**: Use the supplied team name and time period; clarify only missing scope (usually past week for Progress/Problems, next
 week for Plans)
 2. **Gather information**: Use available tools or ask the user directly
 3. **Draft the update**: Follow the strict formatting guidelines

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from playwright.sync_api import sync_playwright
 
 # Example: Discovering buttons and other elements on a page
@@ -6,9 +8,9 @@ with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
 
-    # Navigate to page and wait for it to fully load
-    page.goto('http://localhost:5173')
-    page.wait_for_load_state('networkidle')
+    # Adapt this readiness locator to a control observed in the target app.
+    page.goto('http://localhost:5173', wait_until='domcontentloaded')
+    page.get_by_role('button').first.wait_for(state='visible')
 
     # Discover all buttons on the page
     buttons = page.locator('button').all()
@@ -34,7 +36,10 @@ with sync_playwright() as p:
         print(f"  - {name} ({input_type})")
 
     # Take screenshot for visual reference
-    page.screenshot(path='/tmp/page_discovery.png', full_page=True)
-    print("\nScreenshot saved to /tmp/page_discovery.png")
+    output_dir = Path('test-artifacts')
+    output_dir.mkdir(exist_ok=True)
+    output_path = output_dir / 'page_discovery.png'
+    page.screenshot(path=str(output_path), full_page=True)
+    print(f"\nScreenshot saved to {output_path.resolve()}")
 
     browser.close()

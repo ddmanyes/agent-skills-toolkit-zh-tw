@@ -1,32 +1,24 @@
 ---
 name: mcp-builder
-description: 建立高品質 MCP (Model Context Protocol) 伺服器的指南，使 LLM 能透過設計良好的工具與外部服務互動。當你需要整合外部 API 或服務時（支援 Python 的 FastMCP 或 Node/TypeScript 的 MCP SDK），請使用此技能。
+description: 設計、建立或修改 MCP 伺服器的工具、資源、Schema 與傳輸層；適用 Python FastMCP 或 TypeScript MCP SDK，不因一般 API 整合自動啟用。
 ---
+# MCP 伺服器開發
 
-# MCP 伺服器開發大腦 (MCP Builder)
+採用專案既有語言、SDK 版本、傳輸與權限模型；新專案按部署需求選擇。查閱與目標版本相符的官方 MCP／SDK 文件，避免把舊範例當成現行 API。
 
-建立高品質的 MCP 伺服器，使 LLM 能透過設計良好的工具與資源與外部服務互動。
+## 按需要讀取
 
-## 1. 設計哲學 (Design Philosophy)
-- **工具 vs. 覆蓋率**：優先建立能完成特定「工作流」的工具。如果使用者需求不明確，則追求完整的 API 端點覆蓋。
-- **命名規範**：使用 `命名空間_動作` 格式（例：`github_create_issue`）。
-- **錯誤引導**：錯誤訊息必須具備「行動建議」，告訴 AI 下一步該怎麼修復。
+- 工具邊界、命名、輸入與錯誤設計：[mcp_best_practices.md](reference/mcp_best_practices.md)。
+- Python：[python_mcp_server.md](reference/python_mcp_server.md)。
+- TypeScript：[node_mcp_server.md](reference/node_mcp_server.md)。
+- 使用者需要工具選擇品質評估、或新工具語意難以驗證時：[evaluation.md](reference/evaluation.md)，重用 [evaluation.py](scripts/evaluation.py) 和 [範例](scripts/example_evaluation.xml)。小修正不用先交 XML 評估計畫。
 
-## 2. 推定技術棧 (Recommended Stack)
-- **TypeScript (推薦)**：最成熟的 SDK 與類別支持。
-- **Python (FastMCP)**：適合快速原型與數據科學工具。
-- **傳輸協議**：本地開發用 `stdio`；遠端部署用 `Streamable HTTP`。
+## 工作與完成
 
-## 3. 實作檢查清單
-- [ ] **輸入驗證**：使用 Zod 或 Pydantic 定義明確的 Schema 與範例。
-- [ ] **上下文控制**：確保回傳的數據精簡且相關，避免 Token 浪費。
-- [ ] **註解標記**：標註 `destructiveHint`（具破壞性操作）或 `readOnlyHint`。
+先明確目標工作流、資料界限與錯誤情況；需求不清時查資料或問必要問題，不自動擴大成完整 API 端點覆蓋。以 Zod／Pydantic 等定義輸入；名稱可辨識動作，回應包含必要資料與可行的錯誤下一步。
 
-## 4. 執行流程
-1. **研究與規劃**：查看 `https://modelcontextprotocol.io` 獲取最新規範。
-2. **開發與除錯**：使用 `npx @modelcontextprotocol/inspector <command>` 進行熱重載測試。
-3. **評估 (Eval)**：建立 QA 配對以測試 AI 是否能正確選擇工具。
+驗證身份、授權及輸入；destructiveHint、readOnlyHint 等註記是描述，不能代替伺服器的權限檢查。憑證從安全設定取得，不写進 Skill、輸出或測試資料。遠端寫入遵守使用者授權。
 
-## 輸出要求
-- 全程使用「繁體中文」回饋。
-- 寫代碼前必須先產出 XML 格式的評估配對 (Evaluation pairs) 給使用者審查。
+依改動執行 Schema／啟動檢查及相關工具成功、無效輸入、權限和外部失敗案例，可使用專案測試或官方 Inspector。修復問題並重測；無服務或憑證時用明確標示的模擬資料測可測部分，回報未測真實整合。交付程式、使用方式及實際驗證結果；不把尚未執行的 eval 當成品質提升證據。
+
+以繁體中文回報；使用者指定其他語言時依其要求。

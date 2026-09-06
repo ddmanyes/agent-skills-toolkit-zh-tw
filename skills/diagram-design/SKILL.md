@@ -60,7 +60,7 @@ description: 將文字需求、架構敘述、Mermaid 或 draw.io 圖重繪為�
 
 ### 4. 產生 SVG／HTML
 
-以 [template.html](assets/template.html) 為起點，並遵守 [output-spec.md](references/output-spec.md)。
+靜態圖以 [template.html](assets/template.html) 為起點，並遵守 [output-spec.md](references/output-spec.md)。只有需要動態說明時才讀 [motion 模板](assets/template-motion.html)；重用其原有控制器、無 JavaScript 靜態後備、鍵盤控制與 reduced-motion 行為，並通過同一 self_check。
 
 必要順序：
 
@@ -136,3 +136,5 @@ Diagram Design 是執行層；Second Brain 是知識、決策與索引層。不�
 ## 來源與授權
 
 此繁體中文版本改編自 [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)，依 MIT License 使用與修改。保留的原始驗證與抽取腳本受 [LICENSE](LICENSE) 約束。
+
+動態模板從上游 commit `4451eadc484d76aa860edf3289c16fcd082dcdbf` 的 `skills/diagram-design/assets/template-motion.html` 原樣復原；控制器未重寫。self_check 只驗證結構與允許的控制器，不能取代實際瀏覽器互動檢查。

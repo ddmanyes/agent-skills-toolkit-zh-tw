@@ -1,6 +1,6 @@
 ---
 name: brand-guidelines
-description: Applies Anthropic's official brand colors and typography to any sort of artifact that may benefit from having Anthropic's look-and-feel. Use it when brand colors or style guidelines, visual formatting, or company design standards apply.
+description: Use when the user requests Anthropic branding or the project explicitly requires it; apply the bundled palette and typography. General branding, formatting, or another company's design system does not trigger this skill.
 license: Complete terms in LICENSE.txt
 ---
 
@@ -8,9 +8,9 @@ license: Complete terms in LICENSE.txt
 
 ## Overview
 
-To access Anthropic's official brand identity and style resources, use this skill.
+Use these bundled Anthropic styling values for an Anthropic-branded artifact. A supplied brand guide or explicit project requirement takes precedence. Verify a current official guide if the task specifically requires current brand compliance.
 
-**Keywords**: branding, corporate identity, visual identity, post-processing, styling, brand colors, typography, Anthropic brand, visual formatting, visual design
+**Scope**: Anthropic brand styling only.
 
 ## Brand Guidelines
 
@@ -71,3 +71,9 @@ To access Anthropic's official brand identity and style resources, use this skil
 - Uses RGB color values for precise brand matching
 - Applied via python-pptx's RGBColor class
 - Maintains color fidelity across different systems
+
+## Completion
+
+Inspect the rendered artifact for the requested palette, typography or stated fallback, readable contrast, and preserved text hierarchy.
+Fix mismatches before delivery.
+Report missing fonts or an unavailable render check; do not claim automatic font substitution or exact brand compliance without inspecting the result.

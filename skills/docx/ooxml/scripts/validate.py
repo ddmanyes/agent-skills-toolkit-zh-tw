@@ -30,6 +30,10 @@ def main():
         action="store_true",
         help="Enable verbose output",
     )
+    parser.add_argument(
+        "--author", action="append", dest="authors",
+        help="Tracked-edit author to validate; repeat for a set (default: Claude and Codex).",
+    )
     args = parser.parse_args()
 
     # Validate paths
@@ -55,7 +59,8 @@ def main():
     # Run validators
     success = True
     for V in validators:
-        validator = V(unpacked_dir, original_file, verbose=args.verbose)
+        options = {"authors": args.authors} if V is RedliningValidator else {}
+        validator = V(unpacked_dir, original_file, verbose=args.verbose, **options)
         if not validator.validate():
             success = False
 

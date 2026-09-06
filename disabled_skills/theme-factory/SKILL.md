@@ -1,13 +1,13 @@
 ---
 name: theme-factory
-description: Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that you can apply to any artifact that has been creating, or can generate a new theme on-the-fly.
+description: Apply a named bundled color/font theme or create a requested custom theme for slides, documents, or HTML artifacts. Use when the user asks to select or apply a theme; preserve an existing brand or specified theme.
 license: Complete terms in LICENSE.txt
 ---
 
 
 # Theme Factory Skill
 
-This skill provides a curated collection of professional font and color themes themes, each with carefully selected color palettes and font pairings. Once a theme is chosen, it can be applied to any artifact.
+This skill provides a curated collection of professional font and color themes, each with carefully selected color palettes and font pairings. Once a theme is chosen, it can be applied to any artifact.
 
 ## Purpose
 
@@ -20,25 +20,25 @@ To apply consistent, professional styling to presentation slide decks, use this 
 
 To apply styling to a slide deck or other artifact:
 
-1. **Show the theme showcase**: Display the `theme-showcase.pdf` file to allow users to see all available themes visually. Do not make any modifications to it; simply show the file for viewing.
-2. **Ask for their choice**: Ask which theme to apply to the deck
-3. **Wait for selection**: Get explicit confirmation about the chosen theme
-4. **Apply the theme**: Once a theme has been chosen, apply the selected theme's colors and fonts to the deck/artifact
+1. **Use the existing choice**: If the user already specified a bundled theme, custom palette, or brand, apply it without asking for confirmation again.
+2. **Support selection**: If the user asks to choose among themes, show [theme-showcase.pdf](theme-showcase.pdf) unchanged and ask for their choice. If they delegate the choice, select a fitting theme and state it.
+3. **Read one theme**: Load the corresponding file from the theme list below, then apply its colors and fonts to the artifact.
+4. **Check the result**: Inspect contrast, glyph coverage, readable fallback fonts, and consistent use across the artifact.
 
 ## Themes Available
 
 The following 10 themes are available, each showcased in `theme-showcase.pdf`:
 
-1. **Ocean Depths** - Professional and calming maritime theme
-2. **Sunset Boulevard** - Warm and vibrant sunset colors
-3. **Forest Canopy** - Natural and grounded earth tones
-4. **Modern Minimalist** - Clean and contemporary grayscale
-5. **Golden Hour** - Rich and warm autumnal palette
-6. **Arctic Frost** - Cool and crisp winter-inspired theme
-7. **Desert Rose** - Soft and sophisticated dusty tones
-8. **Tech Innovation** - Bold and modern tech aesthetic
-9. **Botanical Garden** - Fresh and organic garden colors
-10. **Midnight Galaxy** - Dramatic and cosmic deep tones
+1. [Ocean Depths](themes/ocean-depths.md) - Professional and calming maritime theme
+2. [Sunset Boulevard](themes/sunset-boulevard.md) - Warm and vibrant sunset colors
+3. [Forest Canopy](themes/forest-canopy.md) - Natural and grounded earth tones
+4. [Modern Minimalist](themes/modern-minimalist.md) - Clean and contemporary grayscale
+5. [Golden Hour](themes/golden-hour.md) - Rich and warm autumnal palette
+6. [Arctic Frost](themes/arctic-frost.md) - Cool and crisp winter-inspired theme
+7. [Desert Rose](themes/desert-rose.md) - Soft and sophisticated dusty tones
+8. [Tech Innovation](themes/tech-innovation.md) - Bold and modern tech aesthetic
+9. [Botanical Garden](themes/botanical-garden.md) - Fresh and organic garden colors
+10. [Midnight Galaxy](themes/midnight-galaxy.md) - Dramatic and cosmic deep tones
 
 ## Theme Details
 
@@ -56,4 +56,16 @@ After a preferred theme is selected:
 4. Maintain the theme's visual identity across all slides
 
 ## Create your Own Theme
-To handle cases where none of the existing themes work for an artifact, create a custom theme. Based on provided inputs, generate a new theme similar to the ones above. Give the theme a similar name describing what the font/color combinations represent. Use any basic description provided to choose appropriate colors/fonts. After generating the theme, show it for review and verification. Following that, apply the theme as described above.
+To handle cases where none of the existing themes work for an artifact, create a custom theme.
+Based on provided inputs, generate a new theme similar to the ones above.
+Give the theme a similar name describing what the font/color combinations represent.
+Use any basic description provided to choose appropriate colors/fonts.
+If the user authorized you to choose or create and apply the theme, show the resulting palette as part of the deliverable and apply it.
+If they asked to select a custom theme before application, present the concrete palette and font choices for that selection first.
+
+## Completion
+
+Deliver the styled artifact after checking the rendered result against the selected theme and required content.
+Correct mismatches and repeat the affected check.
+If a font or renderer is unavailable, report the actual fallback or unverified layout.
+Preserve a recoverable copy before replacing an existing artifact; keep the bundled showcase unchanged.

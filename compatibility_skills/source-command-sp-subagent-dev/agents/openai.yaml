@@ -1,0 +1,6 @@
+interface:
+  display_name: "source-command-sp-subagent-dev"
+  short_description: "Legacy command compatibility"
+  default_prompt: "Use $source-command-sp-subagent-dev for the requested workflow."
+policy:
+  allow_implicit_invocation: false

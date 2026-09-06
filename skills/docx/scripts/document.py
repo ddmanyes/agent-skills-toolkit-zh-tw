@@ -847,7 +847,7 @@ class Document:
             self.unpacked_path, self.original_docx, verbose=False
         )
         redlining_validator = RedliningValidator(
-            self.unpacked_path, self.original_docx, verbose=False
+            self.unpacked_path, self.original_docx, verbose=False, author=self.author
         )
 
         # Run validations

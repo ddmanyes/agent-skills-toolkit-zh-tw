@@ -1,0 +1,6 @@
+interface:
+  display_name: "improve-architecture"
+  short_description: "Explicitly invoked reference and review workflow"
+  default_prompt: "Use $improve-architecture for the requested workflow."
+policy:
+  allow_implicit_invocation: false

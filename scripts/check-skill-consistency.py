@@ -8,14 +8,15 @@ mirror could sit two skills behind for days without anyone noticing.
 Checks:
   1. the README's active-skill count matches the tree
   2. skills not named verbatim in the README are listed as a note
-  3. every mirror holds every skill, with matching content
+  3. every mirror holds every skill; compare transition content only when requested
+     and check intentional symlinks only for a resolving Skill entry point
 
 Mirrors default to ~/.agents/skills. Add more with --mirror, repeatable, or set
 SKILLS_MIRRORS to an os.pathsep-separated list. Mirror paths are deliberately
 not hardcoded: they differ per machine and some live in private cloud folders.
 
-Exit status is 0 when everything agrees and 1 otherwise, so this can guard a
-commit or run straight after a sync.
+Exit status is 0 when the requested checks pass and 1 otherwise. Report skipped
+content comparisons explicitly; a readable transition copy does not prove parity.
 """
 
 from __future__ import annotations
@@ -30,10 +31,20 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SKILLS_DIR = REPO_ROOT / "skills"
 README = REPO_ROOT / "README.md"
+TRANSITIONAL_LIST = REPO_ROOT / "scripts" / "transitional-skills.txt"
 
 IGNORED_NAMES = {".DS_Store", ".Rhistory", "__pycache__"}
 IGNORED_SUFFIXES = (".pyc", ".pyo")
 COUNT_PATTERN = re.compile(r"收錄 (\d+) 個 Active Skills")
+
+
+def transitional_names() -> set[str]:
+    names = [line.strip() for line in TRANSITIONAL_LIST.read_text(encoding="utf-8").splitlines() if line.strip()]
+    if not names or len(names) != len(set(names)):
+        raise ValueError("The transitional Skill list must be nonempty and contain unique names")
+    if any(not re.fullmatch(r"[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*", name) for name in names):
+        raise ValueError("Invalid name in the transitional Skill list")
+    return set(names)
 
 
 def is_noise(path: Path) -> bool:
@@ -101,10 +112,13 @@ def check_readme(problems: list[str]) -> None:
               + ", ".join(unlisted))
 
 
-def check_mirror(mirror: Path, problems: list[str]) -> None:
+def check_mirror(
+    mirror: Path, problems: list[str], transitional: set[str], include_transitional: bool
+) -> dict[str, int]:
+    counts = {"compared": 0, "transitional": 0, "links": 0}
     if not mirror.is_dir():
         problems.append(f"mirror does not exist: {mirror}")
-        return
+        return counts
 
     tree = skill_names(SKILLS_DIR)
     for name in sorted(tree):
@@ -115,12 +129,25 @@ def check_mirror(mirror: Path, problems: list[str]) -> None:
             # The canonical copy lives elsewhere on purpose; only prove it resolves.
             if not (target / "SKILL.md").is_file():
                 problems.append(f"{mirror}: broken symlink for {name} -> {os.readlink(target)}")
+            counts["links"] += 1
             continue
 
         if not target.is_dir():
             problems.append(f"{mirror}: missing skill {name}")
             continue
 
+        if name in transitional and not include_transitional:
+            try:
+                with (target / "SKILL.md").open("rb") as stream:
+                    stream.read(1)
+            except OSError as error:
+                problems.append(f"{mirror}: transitional entry point is not readable for {name}: {error}")
+                continue
+            counts["transitional"] += 1
+            print(f"skip  {mirror}: {name} transitional/external; entry point readable, content not compared")
+            continue
+
+        counts["compared"] += 1
         missing, differing = compare_trees(source, target)
         for entry in sorted(missing):
             problems.append(f"{mirror}: {name} is missing {entry}")
@@ -130,6 +157,7 @@ def check_mirror(mirror: Path, problems: list[str]) -> None:
     extra = sorted(skill_names(mirror) - tree)
     if extra:
         print(f"note  {mirror}: holds skills this repository does not track: {', '.join(extra)}")
+    return counts
 
 
 def resolve_mirrors(arguments: argparse.Namespace) -> list[Path]:
@@ -152,13 +180,25 @@ def main() -> int:
     parser.add_argument(
         "--skip-readme", action="store_true", help="only compare mirrors"
     )
+    parser.add_argument(
+        "--include-transitional", action="store_true",
+        help="also compare the four transition copies to the public fallback (read-only)",
+    )
     arguments = parser.parse_args()
 
     problems: list[str] = []
+    try:
+        transitional = transitional_names()
+    except (OSError, ValueError) as error:
+        print(f"FAIL  Cannot load transitional Skill policy: {error}", file=sys.stderr)
+        return 1
+    totals = {"compared": 0, "transitional": 0, "links": 0}
     if not arguments.skip_readme:
         check_readme(problems)
     for mirror in resolve_mirrors(arguments):
-        check_mirror(mirror, problems)
+        counts = check_mirror(mirror, problems, transitional, arguments.include_transitional)
+        for key, value in counts.items():
+            totals[key] += value
 
     if problems:
         print(f"FAIL  {len(problems)} problem(s) found\n", file=sys.stderr)
@@ -166,7 +206,11 @@ def main() -> int:
             print(f"  - {problem}", file=sys.stderr)
         return 1
 
-    print(f"OK    {len(skill_names(SKILLS_DIR))} skills consistent across README and mirrors")
+    print(
+        f"OK    Mirror checks passed: {totals['compared']} content comparison(s); "
+        f"{totals['transitional']} transitional copy/copies and {totals['links']} resolving link(s) "
+        "not content-compared."
+    )
     return 0
 
 
