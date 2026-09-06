@@ -49,7 +49,7 @@ python3 scripts/check-skill-consistency.py --mirror ~/.agents/skills
 
 ## 🗺️ 新專案怎麼串起來用
 
-不知道從哪個 skill 開始？看 **[新專案工作流.md](./新專案工作流.md)**——一張流程圖 + 對照表，說明開新專案時各階段該呼叫哪個 skill。
+不知道從哪個 skill 開始？看 **[新專案工作流.md](./新專案工作流.md)**——三張分階段流程圖與觸發條件對照表，說明開新專案時各階段該呼叫哪個 skill。
 
 ---
 
@@ -75,7 +75,57 @@ git pull --ff-only
 - Codex／通用 Agent：`~/.agents/skills`
 - Antigravity：`~/.gemini/config/skills`
 
+### 只更新指定客戶端
+
+以下指令會同步該客戶端的 Active Skills；不會自動啟用 Disabled Skills 或安裝相容 overlay。先在 repository 根目錄執行 `git pull --ff-only`。
+
+| 客戶端 | Windows PowerShell | macOS／Linux |
+| --- | --- | --- |
+| Claude Code | `.\scripts\sync-local-skills.ps1 -Claude` | `./scripts/sync-local-skills.sh --claude` |
+| Antigravity | `.\scripts\sync-local-skills.ps1 -Antigravity` | `./scripts/sync-local-skills.sh --antigravity` |
+
+只更新一個技能，例如 Claude Code 的 `docx`：
+
+```powershell
+.\scripts\sync-local-skills.ps1 -Claude -SkillNames docx
+```
+
+```bash
+./scripts/sync-local-skills.sh --claude --skill docx
+```
+
+安裝到其他位置時，先確認實際目錄與連結目標。若舊路徑連到上述標準目錄，只同步實際目錄一次；不要刪掉連結或再複製一份。
+
+### 驗證兩個客戶端
+
+在 repository 根目錄執行；使用有 Python 3 的環境，macOS／Linux 可把 `python` 換成 `python3`：
+
+```powershell
+python scripts/check-skill-consistency.py --mirror "$HOME/.claude/skills"
+python scripts/check-skill-consistency.py --mirror "$HOME/.gemini/config/skills"
+```
+
+這是對照 repository **全部 Active Skills** 的檢查。如果你刻意只安裝部分技能，未安裝的項目仍會列為缺失，不能把它誤認為本次指定技能更新失敗；單一技能可用檔案比對及 `skill-qa-gate` 檢查。過渡 Radar 內容預設不比對，應在其維護正本驗證。
+
+### 備份與更新範圍
+
 同步採增量覆蓋：只更新已選技能，覆寫前先把原檔存入各環境的 `skills-backups`，並保留其他本機檔案。指定 `--skill NAME`／`-SkillNames NAME` 可縮小範圍。舊技能目錄預設保留；只有明確加 `--archive-legacy`／`-ArchiveLegacy` 才歸檔已選替代技能的舊入口。
+
+### 更新已安裝的 Disabled Skills
+
+例如該客戶端已安裝 `frontend-design`，可明確更新：
+
+```powershell
+.\scripts\sync-local-skills.ps1 -Claude -SkillNames frontend-design -IncludeDisabled
+```
+
+```bash
+./scripts/sync-local-skills.sh --claude --skill frontend-design --include-disabled
+```
+
+Antigravity 使用對應的 `-Antigravity`／`--antigravity` 開關。此方式要求每個選定目標已存在同名技能；`-IncludeDisabled`／`--include-disabled` 必須搭配明確名稱。Active 與 Disabled 的更新建議分開執行；若兩區都有同名來源，腳本會拒絕含糊選擇。這些選項不會批次啟用所有 Disabled Skills。
+
+### 過渡 Radar 的來源保護
 
 四個過渡 Radar 名稱由 [transitional-skills.txt](scripts/transitional-skills.txt) 共用管理。每個同步目標各自判斷：尚無該目錄時安裝本倉庫的相容副本，讓新安裝仍可使用；已有目錄時預設保留並顯示 `SKIP transitional/external`，避免覆蓋另一來源管理的版本。指定名稱但未授權覆寫已安裝的過渡副本時，會在寫入前停止。
 
@@ -95,9 +145,31 @@ git pull --ff-only
 
 ## 本次稽核與相容入口
 
-[2026-09-06 修復紀錄](docs/skills-audit-2026-09-06.md) 說明實際證據、保留內容與未測限制。觸發與完成條件按任务需要調整；未宣稱 Astra／Sol／Luna 的速度或模型效果已提升。
+[2026-09-06 修復紀錄](docs/skills-audit-2026-09-06.md) 說明實際證據、保留內容與未測限制。觸發與完成條件按任務需要調整；未宣稱 Astra／Sol／Luna 的速度或模型效果已提升。
 
 [compatibility_skills](compatibility_skills/README.md) 維護 25 個舊命令及 3 個既有本機流程的 overlay，另有逐名比較與來源 hash。這些不是新增 Active Skills；只向既有同名安裝逐檔合併，先備份、檢查相依並保留原環境與使用者資料。常規同步腳本不會自動新增這些相容入口。
+
+### 相容入口合併範例
+
+以已安裝的 `source-command-docx-ooxml` 為例：先更新同一客戶端的 `docx` 正本，再依 [相容層安裝說明](compatibility_skills/README.md) 合併。以下以 Claude Code 的 `~/.claude/skills` 為安裝根；Antigravity 改用 `~/.gemini/config/skills`。
+
+| repository 來源 | 既有安裝的目標 |
+| --- | --- |
+| `compatibility_skills/source-command-docx-ooxml/SKILL.md` | `<安裝根>/source-command-docx-ooxml/SKILL.md` |
+| `compatibility_skills/source-command-docx-ooxml/agents/openai.yaml` | `<安裝根>/source-command-docx-ooxml/agents/openai.yaml` |
+
+1. 確认相容入口已存在，並檢查 [manifest.json](compatibility_skills/manifest.json) 的相依。
+2. 將會覆寫的原檔備份到 Skill discovery 目錄外，保留原相對路徑；不存在的新檔也記錄於部署清單，便於回復。
+3. 只合併表中受管檔案，保留其他檔案、環境與資料。正本與相容入口必須是安裝根下的同層目錄，才能解析 `../docx`。
+4. 在有 PyYAML 的 Python 環境檢查實際安裝入口：
+
+```powershell
+python skills/skill-qa-gate/scripts/lint_skill.py "$HOME/.claude/skills/source-command-docx-ooxml"
+```
+
+NotebookLM 等 overlay 並非完整安裝包，另需核對 manifest 所列的既有 runtime 檔案。不要用整目錄替換、`--delete` 或清空目錄的方式套用。完成後重啟客戶端或開新 session。
+
+本機更新數量取決於各客戶端已安裝的範圍，不等於 repository 的 Active Skills 總數；個別部署紀錄應留在本機。
 
 ## 📂 技能包內容清單
 
