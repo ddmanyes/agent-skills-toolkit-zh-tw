@@ -1,0 +1,23 @@
+{
+  "skill_name": "sp-subagent-dev",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "將已授權的本機計畫派給 Sol：A 唯讀建置診斷，B 獨立 parser 修补，主代理同時準備獨立整合測試，交付後整合。除主代理外另有兩個子代理名額，部署未授權。僅輸出派遣決策。",
+      "expected_output": "A medium、B high；明確檔案責任與測試；主代理整合且不部署。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "想用 Sol，但工具只允許繼承模型。A 和 B 都要修改 auth.py，正式 key 尚未授權。僅輸出派遣決策。",
+      "expected_output": "說明不能指定 Sol；主代理處理或如實繼承；auth.py 同一時間單一寫入者，交接前確認停止並檢查 diff，不發 key。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "幫我把文件中的一個錯字修正。需要派三個 subagent 嗎？僅輸出決策。",
+      "expected_output": "主代理直接處理，不啟動無獨立價值的代理。",
+      "files": []
+    }
+  ]
+}

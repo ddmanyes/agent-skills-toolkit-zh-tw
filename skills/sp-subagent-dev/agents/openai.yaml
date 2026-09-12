@@ -1,0 +1,4 @@
+interface:
+  display_name: "子代理分工與驗收"
+  short_description: "依任務選擇 Sol 與主代理，明確交接並驗證成果"
+  default_prompt: "使用 $sp-subagent-dev，依已授權計畫分派獨立工作，並由主代理整合驗收。"
