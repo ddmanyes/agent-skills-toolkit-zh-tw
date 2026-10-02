@@ -1,6 +1,6 @@
 ---
 name: sp-code-review
-description: 審查指定 diff、工作樹或實作與規格的差異，以 Standards／Spec 雙軸回報具體問題；適用一般程式碼及 Python／生物資訊改動。
+description: 依專案成文規範（AGENTS.md、CLAUDE.md 等）或規格（issue／PRD）審查指定 diff、工作樹或實作，以 Standards／Spec 雙軸回報具體問題；適用一般程式碼及 Python／生物資訊改動。只求找出缺陷時優先用客戶端內建審查（Claude Code `/code-review`、Codex `/review`）。
 allowed-tools: Terminal, Read, Write, Edit, Glob, Grep, Task
 ---
 # 進階程式碼審查
