@@ -1,0 +1,4 @@
+interface:
+  display_name: "code-simplifier"
+  short_description: "專案開發與維護的任務技能"
+  default_prompt: "Use $code-simplifier for the requested workflow."

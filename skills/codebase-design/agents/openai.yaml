@@ -1,0 +1,4 @@
+interface:
+  display_name: "codebase-design"
+  short_description: "專案開發與維護的任務技能"
+  default_prompt: "Use $codebase-design for the requested workflow."

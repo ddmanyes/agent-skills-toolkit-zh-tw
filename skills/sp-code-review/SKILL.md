@@ -13,9 +13,11 @@ allowed-tools: Terminal, Read, Write, Edit, Glob, Grep, Task
 2. 比對兩個指定版本用兩端 diff；分支新增工作用 merge-base 到 HEAD；工作樹審查包含 staged、unstaged 及相關 untracked 檔案。記錄實際範圍和指令，不能用固定的三點 diff 取代所有模式。
 3. 未指定時，從當前改動、PR 或任務上下文推導並說明。只有不同基準會改變審查結果且無法判斷時才問。空 diff 回報無改動；無效 ref 先修正，不能當作審查通過。
 
+對 commit／分支記錄解析後的 SHA；對工作樹記錄檔案清單與審查時的 diff。審查期間若內容改變，只對原快照下結論，或重新檢查變動部分後標明範圍，避免兩軸讀到不同版本。適用的 CODING_STANDARDS.md、CONTRIBUTING.md 也納入規範來源。
+
 ## 兩軸審查
 
-- **Standards**：讀適用的 AGENTS.md、實際專案指示、CONTEXT.md／風格指南及變更相關設定；以 [SMELLS.md](SMELLS.md) 作判斷基線。專案規範優先；smell 是需證據支持的判斷，不能只因命名相似就判錯。
+- **Standards**：讀適用的 AGENTS.md、實際專案指示、專案指定詞彙表（GLOSSARY.md 或既有 CONTEXT.md）／風格指南及變更相關設定；以 [SMELLS.md](SMELLS.md) 作判斷基線。專案規範優先；smell 是需證據支持的判斷，不能只因命名相似就判錯。
 - **Spec**：優先使用使用者需求與已定案對話，再找 issue、PRD、規格檔。指出漏做、做錯及未要求的行為；引用需求與對應程式位置。無可核對規格時明確標為未評估，繼續可完成的 Standards 審查。
 - 大範圍且環境允許時可讓兩個子代理獨立審查，傳入範圍及必要規範／來源路徑；無共享檔案工具時才附必要原文。小 diff 可在同一代理內分兩軸檢查。
 

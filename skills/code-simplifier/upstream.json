@@ -1,0 +1,7 @@
+{
+  "mode": "local-improvement",
+  "acknowledged_source": "https://github.com/anthropics/claude-plugins-official",
+  "source_revision": null,
+  "provenance_status": "repository acknowledgement; exact original revision not established",
+  "note": "Not a mattpocock skill; this release strengthens readability and baseline verification."
+}

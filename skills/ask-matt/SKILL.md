@@ -25,6 +25,8 @@ disable-model-invocation: true
 - 需求仍模糊：`sp-brainstorming`；需求已定、需要計畫：`sp-writing-plans`；依既定計畫實作：`sp-executing-plans`。
 - 新功能的測試先行：`tdd`；失敗測試或 bug：`sp-fix-test`。
 - 完成後審查：只找缺陷用客戶端內建審查（Claude Code `/code-review`、Codex `/review`）；對照專案規範或規格用 `sp-code-review`。
+- 局部簡化且保持行為：`code-simplifier`；介面與測試接縫設計：`codebase-design`。
+- 明確要求交接下一輪：`handoff`；回顧這輪工具／規範／檢查流程：`retro`。
 - 領域詞彙或 ADR：`domain-modeling`；深模組與架構摩擦：`improve-architecture`。
 - 長任務需要檔案化進度：`planning-with-files`；依 PRD 自主循環：`ralph-loop`；使用者明確授權全自動執行：`autonomous-pilot`。
 - 建立或修改 Skill：`skill-creator`，並以 `skill-qa-gate` 驗證；Agent 會讀的文件同時使用 `writing-for-agents`。

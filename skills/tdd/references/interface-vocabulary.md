@@ -1,13 +1,5 @@
-# Interface vocabulary for test placement
+# Interface vocabulary
 
-This standalone reference applies the module vocabulary used by improve-architecture to a different task: placing meaningful tests. Reading it does not start an architecture review.
-
-- **Module:** a unit with interface and implementation, at function, class, package or cross-layer scale.
-- **Interface:** everything callers must know, including types, invariants, ordering, failures, configuration and material performance constraints.
-- **Depth:** how much useful behavior a small interface hides; a shallow wrapper may expose as much complexity as its implementation.
-- **Seam:** a place where behavior can vary without editing that location. Tests observe the appropriate public interface; not every private helper needs its own seam.
-- **Adapter:** translates between interfaces at a real varying boundary; do not invent one only to satisfy a test.
-- **Leverage:** one implementation supports many callers and tests.
-- **Locality:** changes and validation stay concentrated in the responsible module.
+For interface design, read [codebase-design](../../codebase-design/SKILL.md), the shared source for module, interface, depth, seam and adapter definitions. This is a design reference, not permission to start an architecture review. If unavailable, retain the current public interface and test observable behavior; report the missing design reference only when an unresolved design choice depends on it.
 
 Use project domain names and existing ADRs. For a bug, choose a test that fails on the reported behavior and passes after the fix, using an independent expected outcome.

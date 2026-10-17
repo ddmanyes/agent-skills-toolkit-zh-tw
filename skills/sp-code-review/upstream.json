@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "commit": "49dd158d1076134a641b33efb035946536778336",
+  "source_path": "skills/engineering/code-review",
+  "checked_date": "2026-10-18",
+  "mode": "local-adaptation",
+  "note": "Selectively integrated; local authorization, existing glossary paths, storage and validation rules take precedence. Not an unmodified upstream release."
+}

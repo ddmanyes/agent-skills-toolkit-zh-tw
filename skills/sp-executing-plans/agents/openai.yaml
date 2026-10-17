@@ -1,0 +1,4 @@
+interface:
+  display_name: "sp-executing-plans"
+  short_description: "專案開發與維護的任務技能"
+  default_prompt: "Use $sp-executing-plans for the requested workflow."

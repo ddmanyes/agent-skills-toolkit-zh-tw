@@ -7,7 +7,7 @@ description: Test-driven development. Use when the user wants to build features 
 
 TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Apply relevant behavioral and validation rules throughout; read examples or mocking guidance when the current seam needs them.
 
-When exploring the codebase, read `CONTEXT.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
+Read the repo-defined glossary; otherwise use `GLOSSARY.md`, falling back to an existing domain `CONTEXT.md`. Keep existing names and ADR decisions. Do not create or migrate a glossary just to run tests.
 
 ## What a good test is
 
@@ -19,7 +19,7 @@ See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking g
 
 A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
 
-Use seams established by the requested behavior, existing public interface and approved design. State the seam being tested; ask only when choosing it requires an unresolved product or interface decision. Do not repeat approval already given. Focus on meaningful behavior rather than mirroring every implementation detail.
+Use seams established by the requested behavior, existing public interface and approved design. State the seam being tested, the behavior it catches and its blind spots; ask only when choosing it requires an unresolved product or interface decision. Do not repeat approval already given. Focus on meaningful behavior rather than mirroring every implementation detail.
 
 When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), read [Interface vocabulary](references/interface-vocabulary.md). This is a reference, not a request to launch an architecture review.
 

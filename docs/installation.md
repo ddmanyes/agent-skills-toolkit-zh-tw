@@ -130,3 +130,46 @@ Antigravity 使用對應的 `-Antigravity`／`--antigravity` 開關。此方式�
 ```
 
 `--include-transitional`／`-IncludeTransitional` 必須搭配明確的技能名稱，不能只對全部技能開啟。上述覆寫仍先備份；未選中的技能及其他來源的排程不會因此變更。
+
+## 跨電腦更新與共用目錄
+
+2026-10-18：本輪新增 3 個、更新 11 個 skills。請從本 repository 更新，不另裝整套上游插件，避免重複入口。新 checkout 放本機非同步目錄，例如 macOS 的 `~/LocalWork/Codex/`；既有乾淨 checkout 可沿用。
+
+macOS／Linux（在 repository 根目錄，先確認 `git status --short`；有本機修改先保存，不強制覆蓋）：
+
+```bash
+git remote set-url origin https://github.com/ddmanyes/agent-skills-toolkit-zh-tw.git
+git pull --ff-only
+# 三個目的地均為實體目錄時：
+./scripts/sync-local-skills.sh --all
+# 若 ~/.claude/skills 是指向 ~/.agents/skills 的共用連結，改用：
+# ./scripts/sync-local-skills.sh --agents --antigravity
+python3 scripts/check-skill-consistency.py --mirror ~/.agents/skills --mirror ~/.claude/skills --mirror ~/.gemini/config/skills
+```
+
+先用 `ls -ld ~/.claude/skills ~/.agents/skills ~/.gemini/config/skills` 核對連結。上述兩個同步命令擇一，不連續執行。若指向其他路徑，先確認權威目錄再選擇目標；同步腳本刻意拒絕 symlink，不要為通過檢查刪掉連結。
+
+Windows PowerShell（獨立實體目錄）：
+
+```powershell
+git status --short
+git remote set-url origin https://github.com/ddmanyes/agent-skills-toolkit-zh-tw.git
+git pull --ff-only
+.\scripts\sync-local-skills.ps1 -All
+python scripts/check-skill-consistency.py --mirror "$HOME/.agents/skills" --mirror "$HOME/.claude/skills" --mirror "$HOME/.gemini/config/skills"
+```
+
+Junction／reparse point 需先核對目標；腳本不會擅自跨越。歷史分歧、dirty tree 或來源不存在時停止 pull，不使用 force/reset；另建乾淨 clone 並保留舊工作即可。
+
+### 客戶端與 IDE
+
+| 客戶端 | 技能來源 | 本輪處理 |
+| --- | --- | --- |
+| Codex 桌面／CLI／IDE | `~/.agents/skills` | 同一個使用者來源，不複製到插件快取 |
+| Claude Code CLI／IDE extension | `~/.claude/skills` | 若連到 `.agents/skills`，只更新實體來源 |
+| Antigravity App／IDE | `~/.gemini/config/skills` | 共用全域技能；舊 `~/.gemini/antigravity/skills` 若連到此處，保留連結 |
+| Antigravity CLI | `~/.gemini/antigravity-cli/skills` | 不等同 App／IDE；如有使用需另核對，不宣稱本表同步命令已涵蓋 |
+
+路徑參考：[Claude Code skills](https://code.claude.com/docs/en/skills)、[Antigravity skills by surface](https://www.antigravity.google/docs/skills)、[Codex skills](https://learn.chatgpt.com/docs/build-skills)。遠端 IDE／容器使用遠端使用者的 home，不能把本機更新視為遠端已完成。
+
+開新 session 後，明確呼叫 `handoff`、`retro` 或 `improve-architecture` 確認可發現；不要為刷新關閉仍有工作的會話。結構／雜湊驗證與 runtime discovery 應分開記錄。若有登入同步排程仍使用 `--all`，共用 symlink 的機器需將該排程改用 `--agents --antigravity`，避免之後更新失敗。

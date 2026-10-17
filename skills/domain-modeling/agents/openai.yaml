@@ -1,0 +1,4 @@
+interface:
+  display_name: "domain-modeling"
+  short_description: "專案開發與維護的任務技能"
+  default_prompt: "Use $domain-modeling for the requested workflow."

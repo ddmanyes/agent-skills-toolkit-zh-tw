@@ -13,7 +13,7 @@ Active 是 repository 的分發分類，不代表每個客戶端已安裝或會�
 
 ### 設計方法論 (Active，源自 mattpocock/skills)
 
-- **domain-modeling**：建立與磨利專案的領域模型——`CONTEXT.md` 術語表 + ADR 決策紀錄（三條件才寫）。
+- **domain-modeling**：建立與磨利專案的領域模型——`GLOSSARY.md`（相容既有 `CONTEXT.md`）術語表 + ADR 決策紀錄（三條件才寫）。
 - **improve-architecture（去蕪存菁）**：掃描程式碼庫找出深化模組的機會，用 deletion test 判斷哪些抽象在白佔位。
 - **writing-for-agents**：新版 Agent 文件寫作規範，取代 `writing-great-skills`；涵蓋 Skill、`AGENTS.md`、`CLAUDE.md`、規格與其他 Agent 會讀取的文件。
 - **wait-what**：當上一段解釋沒有講清楚時，以補足背景、白話與專案詞彙重新說明。
@@ -22,6 +22,10 @@ Active 是 repository 的分發分類，不代表每個客戶端已安裝或會�
 - **tdd**：以 red–green–refactor 與垂直切片推進功能或修復。
 - **to-questionnaire**：把只有特定利害關係人能回答的未知事項整理成可交付問卷。
 - **ask-matt**：依目前環境實際可用的 Skill，推薦最小工作路徑與替代方案。
+
+- **codebase-design**：共用模組／介面／接縫詞彙與依賴測試原則。
+- **handoff**：明確要求時記錄可恢復的任務交接，不自動傳訊其他聊天。
+- **retro**：明確要求時回顧開發環境、檢查與規範，提出有證據的改善。
 
 ### 跨來源內容雷達（過渡相容副本）
 

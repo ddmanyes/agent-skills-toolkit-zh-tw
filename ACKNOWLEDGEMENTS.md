@@ -32,3 +32,14 @@
 
 ---
 *本倉庫為繁體中文在地化優化版，旨在服務台灣開發者。所有原始邏輯之版權歸屬原作者及其對應之開源協議。*
+
+## 2026-10-18 來源追溯補強
+
+Matt Pocock 上游固定在 [`49dd158d1076134a641b33efb035946536778336`](https://github.com/mattpocock/skills/tree/49dd158d1076134a641b33efb035946536778336)。本輪保留此版本 MIT 授權與 copyright 原文於每個受影響目錄的 `UPSTREAM-LICENSE.txt`。
+
+- **改編**：`improve-architecture`、`domain-modeling`、`tdd`、`ask-matt`、`teach`、`wait-what`；新增 `codebase-design`、`handoff`、`retro`。
+- **方法整合**：`diagnosing-bugs` → `sp-fix-test`、`code-review` → `sp-code-review`、`to-tickets` → `sp-writing-plans`、`implement-spec` → `sp-executing-plans`。SP 系列仍保留原有其他來源與本機規則，不改稱 Matt 的完整原版。
+- **本機補強**：`code-simplifier` 加入可讀性與基準驗證；既有致謝來源為 Anthropic，精確原始 commit 未確認。本輪未把它歸給 Matt。
+- `research`、`to-questionnaire`、`writing-for-agents` 已有對應內容或本機適配，本輪保留。
+
+改編不是官方發行或作者背書。未完整查核的其他來源授權不在此重新宣告；原有 LICENSE／NOTICE 應隨資源保留。完整能力對照見 [升級紀錄](docs/skills-upgrade-2026-10-18.md)。
