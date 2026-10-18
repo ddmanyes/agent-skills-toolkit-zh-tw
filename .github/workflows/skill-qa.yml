@@ -8,6 +8,7 @@ on:
       - "compatibility_skills/**"
       - "scripts/sync-local-skills.*"
       - "scripts/tests/**"
+      - "scripts/rea/**"
       - "scripts/transitional-skills.txt"
       - "scripts/check-skill-consistency.py"
       - ".github/workflows/skill-qa.yml"
@@ -18,6 +19,7 @@ on:
       - "compatibility_skills/**"
       - "scripts/sync-local-skills.*"
       - "scripts/tests/**"
+      - "scripts/rea/**"
       - "scripts/transitional-skills.txt"
       - "scripts/check-skill-consistency.py"
       - ".github/workflows/skill-qa.yml"
@@ -47,6 +49,8 @@ jobs:
           command -v rsync
       - name: Run POSIX Skill sync integration tests
         run: python3 scripts/tests/test_sync_local_skills.py BashSyncTests
+      - name: Test REA MCP protocol checker
+        run: python3 scripts/tests/test_rea_mcp_check.py
       - name: Run DOCX tracked-edit regression tests
         run: python3 skills/docx/tests/test_redlining.py
       - name: Test mirror ownership reporting

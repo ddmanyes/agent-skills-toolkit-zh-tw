@@ -173,3 +173,7 @@ Junction／reparse point 需先核對目標；腳本不會擅自跨越。歷史�
 路徑參考：[Claude Code skills](https://code.claude.com/docs/en/skills)、[Antigravity skills by surface](https://www.antigravity.google/docs/skills)、[Codex skills](https://learn.chatgpt.com/docs/build-skills)。遠端 IDE／容器使用遠端使用者的 home，不能把本機更新視為遠端已完成。
 
 開新 session 後，明確呼叫 `handoff`、`retro` 或 `improve-architecture` 確認可發現；不要為刷新關閉仍有工作的會話。結構／雜湊驗證與 runtime discovery 應分開記錄。若有登入同步排程仍使用 `--all`，共用 symlink 的機器需將該排程改用 `--agents --antigravity`，避免之後更新失敗。
+
+## REA 與 EP 外部工具研究
+
+只同步 skill 不會安裝 MCP runtime。新增兩個技能後，請依 [REA 跨機安裝指南](rea-installation.md) 完成固定版本安裝、單一客戶端註冊及握手驗證。不要跨機複製 config 或秘密。

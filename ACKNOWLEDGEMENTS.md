@@ -43,3 +43,9 @@ Matt Pocock 上游固定在 [`49dd158d1076134a641b33efb035946536778336`](https:/
 - `research`、`to-questionnaire`、`writing-for-agents` 已有對應內容或本機適配，本輪保留。
 
 改編不是官方發行或作者背書。未完整查核的其他來源授權不在此重新宣告；原有 LICENSE／NOTICE 應隨資源保留。完整能力對照見 [升級紀錄](docs/skills-upgrade-2026-10-18.md)。
+
+## REA（2026-10-18）
+
+`reverse-engineer-anything` 及 references 原樣取自 [morluto/rea](https://github.com/morluto/rea) 的 `rea-agents@6.5.0` npm 發行包；MIT 原文與 copyright 保存在技能內的 UPSTREAM-LICENSE.txt，完整性與逐檔hash見 upstream.json。npm metadata未提供gitHead，未推定commit。這是上游指引的分發，不是我們自製的逆向引擎，也不代表上游背書。
+
+`ep-tool-investigation` 為本工具包新增的 EP 候選研究／驗收流程，選擇性使用 REA。REA 的授權不授予被研究軟體、資料或模型再散布權。

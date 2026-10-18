@@ -1,0 +1,6 @@
+interface:
+  display_name: "EP 外部工具研究"
+  short_description: "查核外部工具、REA 行為證據與 EP 差異，建立可追溯驗收契約"
+  default_prompt: "使用 $ep-tool-investigation 研究指定工具如何補強 EP，先核對既有能力，再提出有來源與驗收條件的整合建議。"
+policy:
+  allow_implicit_invocation: true

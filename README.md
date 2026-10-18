@@ -1,6 +1,6 @@
 # Agent Skills Toolkit — 繁體中文優化版
 
-本專案收錄 43 個 Active Skills，可同步到 Claude Code、Codex／通用 Agent 與 Antigravity，涵蓋開發工作流、文件與資料處理、研究及內容整理。詳細流程與技術資源隨技能一起分發。
+本專案收錄 45 個 Active Skills，可同步到 Claude Code、Codex／通用 Agent 與 Antigravity，涵蓋開發工作流、文件與資料處理、研究及內容整理。詳細流程與技術資源隨技能一起分發。
 
 ## 快速開始
 
@@ -33,6 +33,7 @@ cd agent-skills-toolkit-zh-tw
 | 想做甚麼 | 文件 |
 | --- | --- |
 | 安裝、指定客戶端更新、備份與驗證 | [安裝指南](docs/installation.md) |
+| REA runtime、MCP 與 EP 研究 skill 跨機安裝 | [REA 安裝指南](docs/rea-installation.md) |
 | 查看技能分類、用途與 Radar 工作流 | [技能目錄](docs/skill-catalog.md) |
 | 為專案選擇合適的技能組合 | [新專案工作流](新專案工作流.md) |
 | 更新舊命令入口與既有本機流程 | [相容入口指南](compatibility_skills/README.md) |
@@ -49,6 +50,7 @@ cd agent-skills-toolkit-zh-tw
 | [Matt Pocock / skills](https://github.com/mattpocock/skills) | `tdd`、`domain-modeling`、`improve-architecture`、`codebase-design`、`handoff`、`retro`、`teach` 等 | 保留舊名稱、調整觸發與授權、相容舊詞彙表、補驗證；部分方法整合入 SP 系列 |
 | [Jesse Vincent / superpowers](https://github.com/obra/superpowers) | `sp-` 開發流程系列 | 依任務規模規劃、沿用既有批准與專案規範 |
 | [Anthropic / skills](https://github.com/anthropics/skills) 與 [官方 plugins](https://github.com/anthropics/claude-plugins-official) | 文件工具、`mcp-builder`、`code-simplifier` 等 | 在地化與客戶端適配；各目錄的授權保留 |
+| [morluto / rea](https://github.com/morluto/rea) | `reverse-engineer-anything` | 原樣分發 npm 6.5.0 內附 skill；另提供繁體中文安裝指南。`ep-tool-investigation` 為本機新增研究流程 |
 | [完整來源清單](ACKNOWLEDGEMENTS.md) | Ralph、檔案規劃、圖表與其他技能 | 逐項說明參考關係，不將所有內容宣稱為原創 |
 
 **本輪上游基準**：Matt Pocock [`49dd158`](https://github.com/mattpocock/skills/tree/49dd158d1076134a641b33efb035946536778336)（2026-10-18 查核）。新增／更新的改編技能附 `upstream.json` 與 `UPSTREAM-LICENSE.txt`，保留來源路徑、commit 與 MIT 原文。舊項目若未能確認原始 commit，會標示未確認，不倒填來源。

@@ -1,0 +1,17 @@
+{
+  "repository": "https://github.com/morluto/rea",
+  "distribution": "npm:rea-agents@6.5.0",
+  "integrity": "sha512-C6BG7LyrAdR74mSjertM6PrxJkcNZ2bfQNOJornPo9erDEp2tyPRVYPnV5Yodr+1RqewCQla68WulXlVnveD+A==",
+  "git_commit": null,
+  "license": "MIT",
+  "modifications": "Bundled SKILL.md and references unchanged; license and provenance added.",
+  "files_sha256": {
+    "SKILL.md": "3456aab99d48c3294726065c9d5bd586bc165f2849fd5a3d5080381630564715",
+    "references/javascript-applications.md": "b3e5e999833baac828addbb6b7a4ed859f0c68befd465812597bf19c27aa7a0b",
+    "references/runtime-observation.md": "fea85e2005a8fd1c86a946eeede24c20e57592a1deb36576b45216e9854803c8",
+    "references/native-and-artifacts.md": "1d2ac5f64feb5ad6ef8b98d803d570e1c48aa588281ff91a4bbf50d40f924450",
+    "references/evidence-workflows.md": "2bdee98a843d018cf850c706111bb74c459ba8640da00799e9208122e4d5ab80",
+    "references/connection-and-recovery.md": "a33760c84ae100f6ffd27d666e515956c5014ac33a6ee2414807833ae666a2b1",
+    "references/android-applications.md": "412d9cb462d85b07f6fdbc2453dd741ca3da2c0dbba627867d5624df94afa74c"
+  }
+}

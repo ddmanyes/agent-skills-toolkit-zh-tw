@@ -71,3 +71,10 @@ Active 是 repository 的分發分類，不代表每個客戶端已安裝或會�
 
 - **設計專家**：UI-UX Pro Max、玻璃擬態、前端設計、自動化測試。
 - **創意工具**：生成式藝術、Slack GIF 製作。
+
+### 外部工具與相容性研究 (Active)
+
+- **reverse-engineer-anything**：REA 上游原版指引，涵蓋發行檔、JavaScript、原生及執行行為證據；完整原始碼架構研究不啟動REA。
+- **ep-tool-investigation**：核對 EP 既有能力、外部工具差異、adapter/驗收契約及 SB 紀錄；需要發行檔證據時才轉REA。
+
+Skill 同步不會安裝 runtime 或註冊 MCP。請完成 [REA跨機安裝](rea-installation.md)。
