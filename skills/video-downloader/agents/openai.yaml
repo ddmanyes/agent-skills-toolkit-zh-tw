@@ -1,0 +1,6 @@
+interface:
+  display_name: "Video Downloader"
+  short_description: "通用影片下載器（支援反爬偽裝與最高畫質）"
+  default_prompt: "Use $video-downloader to download this video at best quality."
+policy:
+  allow_implicit_invocation: true

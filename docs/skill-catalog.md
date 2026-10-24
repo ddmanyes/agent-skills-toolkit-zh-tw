@@ -2,7 +2,7 @@
 
 [回到專案首頁](../README.md) · [安裝、更新與驗證](installation.md) · [完整來源與致謝](../ACKNOWLEDGEMENTS.md)
 
-Active 是 repository 的分發分類，不代表每個客戶端已安裝或會自動觸發全部技能。共 45 個 Active Skills。
+Active 是 repository 的分發分類，不代表每個客戶端已安裝或會自動觸發全部技能。共 46 個 Active Skills。
 
 **來源類型說明**
 
