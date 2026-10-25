@@ -31,7 +31,7 @@
 下載下來的檔案名稱出現亂碼符號（如 `c ƹƱi...`）。
 
 ### 解決方案
-1. 使用 `scripts/download_video.py` 輔助下載，該腳本直接調用 Windows Unicode API 保留檔名。
+1. 使用 `scripts/download_video.py` 輔助下載，腳本為 yt-dlp 子程序設定 UTF-8 環境，檔名由 yt-dlp 管理。
 2. 或在執行前設定終端編碼：
    `$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8`
 
