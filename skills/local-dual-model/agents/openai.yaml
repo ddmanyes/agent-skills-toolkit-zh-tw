@@ -1,0 +1,6 @@
+interface:
+  display_name: "Local Dual Model"
+  short_description: "調用實驗室本地/Tailscale 雙模型伺服器 (100.109.10.60:8080)"
+  default_prompt: "Use $local-dual-model to interact with the local dual-model server."
+policy:
+  allow_implicit_invocation: true

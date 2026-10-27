@@ -1,6 +1,6 @@
 # Agent Skills Toolkit — 繁體中文優化版
 
-本專案收錄 46 個 Active Skills，可同步到 Claude Code、Codex／通用 Agent 與 Antigravity，涵蓋開發工作流、文件與資料處理、研究及內容整理。詳細流程與技術資源隨技能一起分發。
+本專案收錄 47 個 Active Skills，可同步到 Claude Code、Codex／通用 Agent 與 Antigravity，涵蓋開發工作流、文件與資料處理、研究及內容整理。詳細流程與技術資源隨技能一起分發。
 
 ## 快速開始
 
