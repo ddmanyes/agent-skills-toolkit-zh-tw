@@ -117,7 +117,7 @@ Active 是 repository 的分發分類，不代表每個客戶端已安裝或會�
 | --- | --- | --- |
 | `reverse-engineer-anything` | REA 上游指引，涵蓋發行檔、JavaScript、原生及執行行為證據；完整原始碼架構研究不啟動 REA | 原樣分發 [morluto/rea](https://github.com/morluto/rea) `rea-agents@6.5.0` |
 | `ep-tool-investigation` | 核對 EP 既有能力、外部工具差異、adapter／驗收契約及 SB 紀錄；需要發行檔證據時才轉 REA | 本機新增 |
-| `local-dual-model` | 調用實驗室本地/Tailscale 雙模型伺服器 (100.109.10.60:8080)，支援 System 1 (Clef-flash 9B) 與 System 2 (Gemma 4 26B-A4B) | 本機新增 |
+| `local-dual-model` | 調用 Tailscale 私網雙模型伺服器：Clef-flash 9B 做校準機率的是非／評分／分類，Gemma 4 26B-A4B 做生成；用於指定本地模型、資料不可外送或大量低成本判定 | 本機新增 |
 
 Skill 同步不會安裝 runtime 或註冊 MCP。請完成 [REA 跨機安裝](rea-installation.md)。
 

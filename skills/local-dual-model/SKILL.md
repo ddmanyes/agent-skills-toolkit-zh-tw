@@ -1,6 +1,6 @@
 ---
 name: local-dual-model
-description: 調用實驗室本地/Tailscale 雙模型伺服器 (100.109.10.60:8080)，支援 System 1 決策大腦 (Clef-flash 9B) 與 System 2 生成大腦 (Gemma 4 26B-A4B)。
+description: 調用實驗室 Tailscale 私網雙模型伺服器 (100.109.10.60:8080)：System 1 Clef-flash 9B 輸出校準機率做是非、評分、分類，System 2 Gemma 4 26B-A4B 做文字生成。當使用者明確要求用本地／本機模型、資料不可送往外部 API，或需要大量低成本的是非判定、打分、分類時使用；一般問答或目前代理自己就能完成的工作不必繞道本地模型。
 ---
 
 # Local Dual Model (100.109.10.60:8080)
@@ -38,7 +38,9 @@ description: 調用實驗室本地/Tailscale 雙模型伺服器 (100.109.10.60:8
 | 角色定位 | 核心模型 | Model ID / Alias | 端點 (Endpoint) | 特性與效能數據 |
 |---|---|---|---|---|
 | **System 1：決策大腦**<br>*(分類、打分、路由、查核)* | **Cloudflare `Clef-flash` (9B)**<br>*(IQ4_XS + mmproj, ~5.0GB)* | `clef`<br>`clef-flash` | `POST /v1/systemone` | • **預設常駐**顯存，極低延遲。<br>• 單次 Forward pass 輸出 Brier Loss 校準機率（耗時約 1.3~1.9s）。<br>• **0 output tokens**（純機率計算，零多餘廢話）。 |
-| **System 2：生成大腦**<br>*(推理、寫作、寫 Code)* | **Google `Gemma 4 26B-A4B`**<br>*(Q4_K_M + 430M 原生 MTP, ~16GB)* | `gemma4-26b-a4b`<br>`gemma4`<br>`huihui-qwen3.8-27b` | `POST /v1/chat/completions`<br>*(OpenAI 相容)* | • **按需換入顯存**：若前一請求為 Clef，自動淘汰 Clef 並從 SSD 載入 Gemma 4（冷載入約需 15 秒）。<br>• 生成吞吐約 **~34 tokens/s**（MTP 接受率約 70%）。<br>• 熱載入狀態下單次回應僅約 1~2 秒。 |
+| **System 2：生成大腦**<br>*(推理、寫作、寫 Code)* | **Google `Gemma 4 26B-A4B`**<br>*(Q4_K_M + 430M 原生 MTP, ~16GB)* | `gemma4-26b-a4b`<br>`gemma4`<br>`huihui-qwen3.8-27b`（舊別名） | `POST /v1/chat/completions`<br>*(OpenAI 相容)* | • **按需換入顯存**：若前一請求為 Clef，自動淘汰 Clef 並從 SSD 載入 Gemma 4（冷載入約需 15 秒）。<br>• 生成吞吐約 **~34 tokens/s**（MTP 接受率約 70%）。<br>• 熱載入狀態下單次回應僅約 1~2 秒。 |
+
+> `huihui-qwen3.8-27b` 只是舊客戶端相容用的別名，實際指向同一個 Gemma 4 26B-A4B，伺服器上沒有 Qwen 模型。
 
 ---
 
@@ -72,7 +74,17 @@ python "<SKILL_DIR>/scripts/call_model.py" \
   --decide-choice "這兩篇筆記的關聯屬性為何？" \
   --options 支持 矛盾 延伸 無關 \
   --context "筆記 A 主張 MTP 可提升 40% 速度；筆記 B 記錄在中文長篇測試中速度提升 18%..."
+
+# 自訂量表等級（由低至高 2~10 個）
+python "<SKILL_DIR>/scripts/call_model.py" \
+  --decide-score "此回覆是否切題" --criteria 離題 部分切題 完全切題 \
+  --context "..."
+
+# 長文生成：調高輸出上限並降低溫度
+python "<SKILL_DIR>/scripts/call_model.py" --chat "撰寫 800 字摘要..." --max-tokens 4096 --temperature 0.3
 ```
+
+其他參數：`--system`（System Prompt）、`--model`（覆寫模型 ID 或別名，預設 `--chat` 用 `gemma4-26b-a4b`、判定用 `clef`）。
 
 ### 2. Python 模組直接匯入
 
@@ -101,8 +113,13 @@ relation = decide_choice("判斷關聯性", options=["支持", "矛盾", "無關
      **回傳的 `score` 與 `probabilities` 鍵都是 0 起算的等級索引**（5 級量表為 `0`～`4`，`score` 是機率加權平均），不是 1～5。要對回標籤請用 `criteria[round(score)]`；`decide_score()` 已附上 `label` 與 `label_probabilities`。
    - `type: "choice"`（分類）：**必須提供 `criteria: dict[str, str]`**（非空物件，如 `{"A": "說明A", "B": "說明B"}` 或各標籤映射），缺漏會直接報 HTTP 400。
 2. **互斥切換等待（避免逾時誤判）**：
-   - 當常駐為 Clef 時，首次呼叫 `/v1/chat/completions` (Gemma 4) 需等待約 15 秒冷載入。
-   - **客戶端 Timeout 請一律保持在 60 秒以上**，切勿在 15 秒內重送或判定斷線。
-3. **中文編碼問題**：
+   - 當常駐為 Clef 時，首次呼叫 `/v1/chat/completions` (Gemma 4) 需等待約 15～20 秒冷載入；反過來 Gemma 4 在顯存時呼叫 `/v1/systemone`，Clef 也要約 6 秒重新載入。
+   - **會觸發推論的請求，客戶端 Timeout 一律保持在 60 秒以上**，切勿在 15 秒內重送或判定斷線。`call_model.py` 設定：System 1 為 60 秒、`chat` 為 120 秒；`GET /v1/models`（`--status`）不載入模型，設 30 秒。
+   - 每次呼叫 Gemma 4 都會把 Clef 擠出顯存，伺服器若有他人同時使用 System 1，請避免頻繁穿插 `--chat`。
+3. **回覆截斷**：
+   - `max_tokens` 用完時伺服器回 `finish_reason: "length"`，內容會在句中斷掉。`chat()` 會發出 `UserWarning` 提示；長文請調高 `max_tokens`（`--max-tokens`）。
+   - 實測（2026-10-27）此 Gemma 4 設定不回 `reasoning_content`，推理文字直接放在 `content`，不會出現 content 為空的情況。
+4. **中文編碼問題**：
    - Windows 終端機若直接以命令列組合非 ASCII JSON，易受終端 code page 截斷。請優先使用 `call_model.py` 或由 Python 透過 UTF-8 傳遞請求。
+   - `call_model.py` 的 CLI 會把 stdout／stderr 改為 UTF-8，避免 cp950 終端機印出簡體字、日文或 emoji 時發生 `UnicodeEncodeError`。以模組匯入時不會改動呼叫端的輸出設定。
 
