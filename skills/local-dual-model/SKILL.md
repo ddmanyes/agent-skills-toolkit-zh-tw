@@ -12,16 +12,13 @@ description: 調用實驗室本地/Tailscale 雙模型伺服器 (100.109.10.60:8
 
 ## 一、Second Brain 脈絡與參考文件
 
-本 Skill 之架構設計、參數配置與金鑰規範嚴格對齊 Second Brain 核心決策紀錄：
+本 Skill 之架構設計、參數配置與金鑰規範嚴格對齊 Second Brain 核心決策紀錄。以下為 vault 相對路徑，用 `mcp__second-brain__read_note` 讀取（各電腦的 vault 掛載位置不同，不要寫成本機絕對路徑）：
 
-1. **核心架構決策**：
-   [`decisions/clef-與-gemma4-雙核心個人-ai-架構決策.md`](file:///J:/我的雲端硬碟/PJ_save/second-brain/decisions/clef-與-gemma4-雙核心個人-ai-架構決策.md)
+1. **核心架構決策**：`decisions/clef-與-gemma4-雙核心個人-ai-架構決策.md`
    *(定義了 System 1 + System 2 雙核心架構、M4 Mac mini 24GB 顯存互斥管理、基準測試與落地場景)*
-2. **連線與憑證管理**：
-   [`20-areas/coding/2026-09-05-huihui-qwen38-funnel-api-handoff.md`](file:///J:/我的雲端硬碟/PJ_save/second-brain/20-areas/coding/2026-09-05-huihui-qwen38-funnel-api-handoff.md)
+2. **連線與憑證管理**：`20-areas/coding/2026-09-05-huihui-qwen38-funnel-api-handoff.md`
    *(記錄了 Tailscale 連線、API 金鑰來源與 Windows 客戶端接入)*
-3. **共享與演進歷史**：
-   [`30-resources/gemma-4-26b-遠端-windows-tailscale-使用指南-2026-10-02.md`](file:///J:/我的雲端硬碟/PJ_save/second-brain/30-resources/gemma-4-26b-遠端-windows-tailscale-使用指南-2026-10-02.md)
+3. **共享與演進歷史**：`30-resources/gemma-4-26b-遠端-windows-tailscale-使用指南-2026-10-02.md`
 
 ---
 
@@ -47,29 +44,31 @@ description: 調用實驗室本地/Tailscale 雙模型伺服器 (100.109.10.60:8
 
 ## 四、呼叫方式與內建腳本
 
-Skill 內建標準調用腳本：[`scripts/call_model.py`](file:///C:/Users/User/.gemini/config/skills/local-dual-model/scripts/call_model.py)
+Skill 內建標準調用腳本：[`scripts/call_model.py`](scripts/call_model.py)
+
+以下範例中的 `<SKILL_DIR>` 是**本 SKILL.md 所在的目錄**（依客戶端不同，可能是 `~/.claude/skills/local-dual-model`、`~/.agents/skills/local-dual-model`、`~/.codex/skills/local-dual-model` 或 `~/.gemini/config/skills/local-dual-model`）。執行時換成實際載入本 Skill 的那個目錄，不要改用其他客戶端的副本。腳本只用標準函式庫，需 Python 3.10+。
 
 ### 1. CLI 呼叫範例
 
 ```bash
 # 檢查模型掛載與常駐狀態
-uv run python "C:/Users/User/.gemini/config/skills/local-dual-model/scripts/call_model.py" --status
+python "<SKILL_DIR>/scripts/call_model.py" --status
 
 # 呼叫 System 2 (Gemma 4) 對話生成
-uv run python "C:/Users/User/.gemini/config/skills/local-dual-model/scripts/call_model.py" --chat "請用繁體中文總結本專案特點"
+python "<SKILL_DIR>/scripts/call_model.py" --chat "請用繁體中文總結本專案特點"
 
 # 呼叫 System 1 (Clef) 是非判定 (noul)
-uv run python "C:/Users/User/.gemini/config/skills/local-dual-model/scripts/call_model.py" \
+python "<SKILL_DIR>/scripts/call_model.py" \
   --decide-noul "這份病理切片報告是否提及淋巴結轉移？" \
   --context "病理診斷：浸潤性導管癌，切片檢查顯示 3 顆哨兵淋巴結中未見癌細胞轉移..."
 
 # 呼叫 System 1 (Clef) 5 級量表評分 (score)
-uv run python "C:/Users/User/.gemini/config/skills/local-dual-model/scripts/call_model.py" \
+python "<SKILL_DIR>/scripts/call_model.py" \
   --decide-score "評估此篇文獻之創新程度" \
   --context "本篇提出利用雙核心架構動態置換模型..."
 
 # 呼叫 System 1 (Clef) 多分類選擇 (choice)
-uv run python "C:/Users/User/.gemini/config/skills/local-dual-model/scripts/call_model.py" \
+python "<SKILL_DIR>/scripts/call_model.py" \
   --decide-choice "這兩篇筆記的關聯屬性為何？" \
   --options 支持 矛盾 延伸 無關 \
   --context "筆記 A 主張 MTP 可提升 40% 速度；筆記 B 記錄在中文長篇測試中速度提升 18%..."
@@ -79,7 +78,7 @@ uv run python "C:/Users/User/.gemini/config/skills/local-dual-model/scripts/call
 
 ```python
 import sys
-sys.path.append("C:/Users/User/.gemini/config/skills/local-dual-model/scripts")
+sys.path.append("<SKILL_DIR>/scripts")
 from call_model import chat, decide_noul, decide_score, decide_choice
 
 # 1. 呼叫 Gemma 4
@@ -99,6 +98,7 @@ relation = decide_choice("判斷關聯性", options=["支持", "矛盾", "無關
 1. **System 1 `/v1/systemone` 的 Schema 規範**：
    - `type: "noul"`（是非）：僅需 `instructions`，回傳 `0.0 ~ 1.0` 的校準機率值。
    - `type: "score"`（評分）：**必須提供 `criteria: list[str]`**（2 到 10 級量表，由低至高），如 `["極差", "不良", "尚可", "良好", "極佳"]`。
+     **回傳的 `score` 與 `probabilities` 鍵都是 0 起算的等級索引**（5 級量表為 `0`～`4`，`score` 是機率加權平均），不是 1～5。要對回標籤請用 `criteria[round(score)]`；`decide_score()` 已附上 `label` 與 `label_probabilities`。
    - `type: "choice"`（分類）：**必須提供 `criteria: dict[str, str]`**（非空物件，如 `{"A": "說明A", "B": "說明B"}` 或各標籤映射），缺漏會直接報 HTTP 400。
 2. **互斥切換等待（避免逾時誤判）**：
    - 當常駐為 Clef 時，首次呼叫 `/v1/chat/completions` (Gemma 4) 需等待約 15 秒冷載入。

@@ -127,9 +127,23 @@ def decide_score(instruction: str, state: str, criteria: list[str] | None = None
     }
     res = make_request("/v1/systemone", data=payload, timeout=30.0)
     answer = res.get("answers", {}).get("result", {})
+    # The server returns 0-based level indices: score is the probability-weighted
+    # mean of 0..len(criteria)-1, and probabilities is keyed "0", "1", ...
+    score = answer.get("score")
+    probabilities = answer.get("probabilities")
+    label = None
+    if isinstance(score, (int, float)):
+        label = criteria[min(max(round(score), 0), len(criteria) - 1)]
+    label_probabilities = None
+    if isinstance(probabilities, dict):
+        label_probabilities = {
+            criteria[int(k)]: v for k, v in probabilities.items() if str(k).isdigit() and int(k) < len(criteria)
+        }
     return {
-        "score": answer.get("score"),
-        "probabilities": answer.get("probabilities"),
+        "score": score,
+        "label": label,
+        "label_probabilities": label_probabilities,
+        "probabilities": probabilities,
         "raw_answer": answer,
         "usage": res.get("usage"),
     }
@@ -196,8 +210,11 @@ def main():
         t0 = time.time()
         res = decide_noul(args.decide_noul, state=args.context)
         print(f"=== System 1 是非判定 (耗時: {time.time() - t0:.2f}s) ===")
-        prob = res.get("probability_yes", 0.0)
+        prob = res.get("probability_yes")
         print(f"問題: {args.decide_noul}")
+        if not isinstance(prob, (int, float)):
+            print(f"錯誤：伺服器未回傳 noul 機率，原始回應: {res.get('raw_answer')}")
+            sys.exit(1)
         print(f"肯定機率 (Probability YES): {prob * 100:.2f}%")
         print(f"判定建議: {'【是 (YES)】' if prob >= 0.5 else '【否 (NO)】'}")
         return
@@ -207,8 +224,12 @@ def main():
         res = decide_score(args.decide_score, state=args.context)
         print(f"=== System 1 量表評分 (耗時: {time.time() - t0:.2f}s) ===")
         print(f"指標: {args.decide_score}")
-        print(f"評分 (1~5): {res.get('score'):.2f}")
-        print("機率分佈:", res.get("probabilities"))
+        score = res.get("score")
+        if not isinstance(score, (int, float)):
+            print(f"錯誤：伺服器未回傳 score，原始回應: {res.get('raw_answer')}")
+            sys.exit(1)
+        print(f"評分 (0~4，0 起算): {score:.2f} → {res.get('label')}")
+        print("機率分佈:", res.get("label_probabilities") or res.get("probabilities"))
         return
 
     if args.decide_choice:
