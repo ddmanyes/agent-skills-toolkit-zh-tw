@@ -1,6 +1,6 @@
 # Agent Skills Toolkit — 繁體中文優化版
 
-本專案收錄 47 個 Active Skills，可同步到 Claude Code、Codex／通用 Agent 與 Antigravity，涵蓋開發工作流、文件與資料處理、研究及內容整理。詳細流程與技術資源隨技能一起分發。
+本專案收錄 49 個 Active Skills，可同步到 Claude Code、Codex／通用 Agent 與 Antigravity，涵蓋開發工作流、文件與資料處理、研究及內容整理。詳細流程與技術資源隨技能一起分發。
 
 ## 快速開始
 
@@ -56,3 +56,5 @@ cd agent-skills-toolkit-zh-tw
 **本輪上游基準**：Matt Pocock [`49dd158`](https://github.com/mattpocock/skills/tree/49dd158d1076134a641b33efb035946536778336)（2026-10-18 查核）。新增／更新的改編技能附 `upstream.json` 與 `UPSTREAM-LICENSE.txt`，保留來源路徑、commit 與 MIT 原文。舊項目若未能確認原始 commit，會標示未確認，不倒填來源。
 
 來源關係區分「改編」、「方法參考」與「本機新增」；授權依各技能與第三方資源原檔，不以一份總授權覆蓋全部作品。參見[本輪升級與完整對照](docs/skills-upgrade-2026-10-18.md)。
+
+本次新增 `harness-purge`、`skill-toolkit`；跨機整併與選擇性去重見 [2026-11-12 更新指南](docs/skills-consolidation-2026-11-12.md)。受來源條款限制的同步文件技能不收入 repository，改由各機已安裝來源提供。

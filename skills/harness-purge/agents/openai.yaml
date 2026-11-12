@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude／Codex 診斷與技能比較"
+  short_description: "診斷任務與技能失敗原因，分開比較格式、內容正確性和修稿結果"
+  default_prompt: "使用 $harness-purge 審查指定技能與失敗樣本，提出最小改善，並用 Claude／Codex 原生產物比較前後結果。"

@@ -125,3 +125,8 @@ Skill 同步不會安裝 runtime 或註冊 MCP。請完成 [REA 跨機安裝](re
 
 - **設計專家**：UI-UX Pro Max、玻璃擬態、前端設計、自動化測試。來源：[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)。
 - **創意工具**：生成式藝術、Slack GIF 製作。
+
+## 2026-11-12 新增
+
+- `harness-purge`：Claude/Codex 失敗診斷與受控技能比較。
+- `skill-toolkit`：工具包維護、已安裝版本解析與評測路由；一般 Codex 新建使用系統 skill-creator。

@@ -54,6 +54,16 @@
 - {priority 或 score} | [[note]] | `{source id}` | {一句判斷}
 ```
 
+## 補發區段
+
+補發模式使用完整週次區段的格式，只改標題與開頭說明：
+
+```markdown
+## {YYYY-Www}（補發 {Asia/Taipei 日期}）
+
+> 補發區段：原排程該週未發布。時窗 {start} 至 {end}。{資料限制，例如 X 舊紀錄無 priority}
+```
+
 ## 完成條件
 
 - 每個列出的 source id 在該週只出現一次。

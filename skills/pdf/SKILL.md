@@ -53,3 +53,8 @@ uv run --with pypdf --with pdfplumber --with pdf2image --with pillow python3 scr
 - 歸檔前若需要先合併、分割或 OCR，先在本 skill 完成，再把產物路徑交給 `save_article`。
 
 以繁體中文回報；使用者指定其他語言時依其要求。
+
+## 已安裝版本的功能分支
+<!-- skill-routing-v1 -->
+需要 旋轉、浮水印、密碼保護、metadata 或 ReportLab 範例 時，讀 [跨平台分支路由](../skill-toolkit/references/variant-routing.md)，以 `resolve --kind synced --skill pdf` 尋找該機已安裝版本，讀取完整流程及其附帶資源後再操作。原有本機實作繼續保留；不同版本的同名腳本參數不可混用。
+此分支需同時安裝 skill-toolkit；缺少時可沿用上述本機功能，並回報外部分支不可用。外部流程中的預裝套件／沙箱假設須依目前環境核對；原檔保護、權限及驗證規則仍適用。來源不可用或有多個不同版本時，不停用那些版本，也不假稱該功能已完成。

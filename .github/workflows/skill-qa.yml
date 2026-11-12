@@ -55,6 +55,8 @@ jobs:
         run: python3 skills/docx/tests/test_redlining.py
       - name: Test mirror ownership reporting
         run: python3 scripts/tests/test_check_skill_consistency.py
+      - name: Test variant routing and reversible Codex configuration
+        run: python3 scripts/tests/test_skill_routes.py
       - name: Run validator tests
         run: python3 skills/skill-qa-gate/scripts/test_lint_skill.py
       - name: Validate compatibility overlays in a shared install root
@@ -93,3 +95,18 @@ jobs:
           fi
 
           python3 skills/skill-qa-gate/scripts/lint_skill.py "${valid_skill_dirs[@]}"
+
+  cross-platform-routing:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test variant routing
+        run: python scripts/tests/test_skill_routes.py
+      - name: Test native sync and explicit runtime skips
+        run: python scripts/tests/test_sync_local_skills.py
