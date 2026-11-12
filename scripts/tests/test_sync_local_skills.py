@@ -40,7 +40,9 @@ class SyncCases:
 
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory(prefix="skills-sync-test-")
-        self.root = Path(self.temp.name)
+        # macOS exposes its temp directory through /var -> /private/var.
+        # Test intentional fixture links, not the OS alias above the fixture.
+        self.root = Path(self.temp.name).resolve()
         self.repo = self.root / "repo"
         self.home = self.root / "home"
         self.target = self.home / ".agents" / "skills"
