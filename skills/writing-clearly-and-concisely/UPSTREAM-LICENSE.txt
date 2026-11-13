@@ -1,0 +1,4 @@
+The Elements of Style (1918), William Strunk Jr. Public domain.
+Upstream README and package.json declare Public Domain; no separate LICENSE file was present.
+Source: https://www.gutenberg.org/files/37134/37134-h/37134-h.htm
+Adapter entry is locally authored using the cited writing principles.

@@ -2,7 +2,7 @@
 
 [回到專案首頁](../README.md) · [安裝、更新與驗證](installation.md) · [完整來源與致謝](../ACKNOWLEDGEMENTS.md)
 
-Active 是 repository 的分發分類，不代表每個客戶端已安裝或會自動觸發全部技能。共 47 個 Active Skills。
+Active 是 repository 的分發分類，不代表每個客戶端已安裝或會自動觸發全部技能。共 51 個 Active Skills。
 
 **來源類型說明**
 
@@ -130,3 +130,12 @@ Skill 同步不會安裝 runtime 或註冊 MCP。請完成 [REA 跨機安裝](re
 
 - `harness-purge`：Claude/Codex 失敗診斷與受控技能比較。
 - `skill-toolkit`：工具包維護、已安裝版本解析與評測路由；一般 Codex 新建使用系統 skill-creator。
+
+## 自然清楚的寫作
+
+| Skill | 用途 | 來源 |
+| --- | --- | --- |
+| `writing-clearly-and-concisely` | 段落、主詞、具體表達與科學內容保留 | obra/Strunk 1918 公版指南；繁中入口在地撰寫 |
+| `humanizer` | 去除制式語句與重複，保留事實和作者語氣 | blader/humanizer MIT繁中適配 |
+
+[安裝與使用](writing-skills-2026-11-14.md)

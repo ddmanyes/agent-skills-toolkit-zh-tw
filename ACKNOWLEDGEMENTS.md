@@ -53,3 +53,9 @@ Matt Pocock 上游固定在 [`49dd158d1076134a641b33efb035946536778336`](https:/
 ## 2026-11-12 整併
 
 `harness-purge` 與跨平台 `skill-toolkit` 路由為本機工具；harness 的來源研究範圍見其 references/mechanisms.md。Radar variants/legacy 為本 repository 既有版本的保留副本。外部 synced 技能由各機原供應來源提供，本次未重新分發其內容或授權檔。
+
+## 寫作技能（2026-11-14）
+
+- [obra/the-elements-of-style](https://github.com/obra/the-elements-of-style)，commit `05fc4f0d2b97b7c042dd9949ad658568e4a1324e`：1918公版參考全文；本地繁中入口另寫，來源README／package宣告Public Domain，無獨立LICENSE檔。
+- [blader/humanizer](https://github.com/blader/humanizer)，commit `b48c832f0f809c1b5658edbb838c2521b72f2413`：MIT，原版規則保留於references，上游LICENSE保留。
+- 本地調整：明確讀者、繁中標點、科學分母與因果強度核對、私人內容與寫入界線。不強制外部detector或跨模型呼叫；不宣稱來源作者背書。
