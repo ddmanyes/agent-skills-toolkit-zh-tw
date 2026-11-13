@@ -1,0 +1,6 @@
+interface:
+  display_name: "研究討論稿審閱"
+  short_description: "核對研究討論的語句、論證、數據分母、證據強度與可回查性"
+  default_prompt: "請使用 $discussion-reviewer 審閱這份討論稿，指出具體問題、證據與建議改寫。"
+policy:
+  allow_implicit_invocation: true

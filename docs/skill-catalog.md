@@ -2,7 +2,7 @@
 
 [回到專案首頁](../README.md) · [安裝、更新與驗證](installation.md) · [完整來源與致謝](../ACKNOWLEDGEMENTS.md)
 
-Active 是 repository 的分發分類，不代表每個客戶端已安裝或會自動觸發全部技能。共 51 個 Active Skills。
+Active 是 repository 的分發分類，不代表每個客戶端已安裝或會自動觸發全部技能。共 52 個 Active Skills。
 
 **來源類型說明**
 
@@ -139,3 +139,5 @@ Skill 同步不會安裝 runtime 或註冊 MCP。請完成 [REA 跨機安裝](re
 | `humanizer` | 去除制式語句與重複，保留事實和作者語氣 | blader/humanizer MIT繁中適配 |
 
 [安裝與使用](writing-skills-2026-11-14.md)
+
+| `discussion-reviewer` | 討論稿語句、論證、分母、證據層級與可回查性審閱 | 本工具包原創；不等同獨立同儕審查 |
