@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-14",
+  "method": "獨立語義判分。判定回覆是否找出題供證據支持的錯誤、保留合理限縮與未知、尊重操作範圍，並檢查預期是否可從題幹得到。",
+  "reviewer": {
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_effort_requested": "medium",
+    "participated_in_writing_or_answering": false,
+    "inherited_parent_context": false,
+    "dispatch_metadata_source": "主代理提供派遣工具紀錄，fork_turns='none'，只收到任務契約。"
+  },
+  "answer_runner_metadata": "主代理提供派遣工具紀錄，答題者指定 gpt-6.1-sol、medium，fork_turns='none'。",
+  "input_alignment_verified": true,
+  "counts": {
+    "PASS": 6,
+    "PARTIAL": 0,
+    "FAIL": 0
+  },
+  "cases": [
+    {
+      "id": "P01",
+      "result": "PASS",
+      "reason": "拆開一月已選作追蹤、三月才記載方向翻轉，以及翻轉可作後續追查理由。保留初選動機未知，也沒有從翻轉直接證明分類誤差。",
+      "expectation_note": "後續追查的理由可以保留為合理性；題供資料無法核定追查已啟動或其啟動時間。"
+    },
+    {
+      "id": "P02",
+      "result": "PASS",
+      "reason": "接受保存計畫足以支持文獻所載的一月初選動機，沒有因缺逐字會議要求補件。對三月「促成」只作獨立、條件式的證據提醒，題幹明確確認的來源只有一月計畫。",
+      "expectation_note": "若預期要考三月的因果時序也已充分支持，題幹須明示三月紀錄載明該時序。"
+    },
+    {
+      "id": "P03",
+      "result": "PASS",
+      "reason": "依全片區域平均和人工圈選區細胞的實際差別指出分析單位及選入範圍改變，改寫仍保留共同研究問題和日別，也未從日別推定使用同一批切片。"
+    },
+    {
+      "id": "P04",
+      "result": "PASS",
+      "reason": "呈現共用一庫與每日一庫的衝突，分開時點、樣本、條碼、庫與動物層級。未擅選一種設計或推生物 n=4，依待核欄位分別指出建庫、條碼、採樣及混樣紀錄。"
+    },
+    {
+      "id": "P05",
+      "result": "PASS",
+      "reason": "接受條碼表所支撐的四時點、一時點一樣本與共用一庫，保留動物和混樣待核。接受已就地更正的歷史文字，亦保留初選理由未知與續查有紀錄的區別，未將條件式實頁回查列為現行問題。"
+    },
+    {
+      "id": "P06",
+      "result": "PASS",
+      "reason": "正確定位 header 外的當前 div.badge，保留歷史 details 的 V3 和已一致的檔名與 title。清楚表明未實際改檔或驗收。",
+      "expectation_note": "「並檢查入口」不能按實際執行判分。題幹只要求定位、明示不執行，也沒有提供實頁或入口目標。題意容許補列入口為日後待驗，無此補充不構成失分。"
+    }
+  ],
+  "grammar_scope": {
+    "static_result": "PASS",
+    "reason": "前置描述保留純文法不啟動完整科學審閱，新引用只適用涉及選題理由、探索歷史、跨版本比較或來源矛盾的審閱，引用首段明示純文法不展開，新增記錄欄位亦為有涉才填。",
+    "behavioral_status": "NOT_CHECKED",
+    "behavioral_reason": "本批六題無純文法控制，README 的既有控制是較早批次。"
+  },
+  "qa": {
+    "existing_lint_result": "PASS",
+    "existing_quick_validate_result": "PASS",
+    "independent_lint_attempt": "預設 python3 環境未安裝 PyYAML，未取得新的 lint 結果。"
+  },
+  "limits": "只使用合成短文本與來源摘要，未看圖或實頁，未獨立查原始紀錄，未測實際編輯、入口、工具委派、自動觸發或跨模型一致性。"
+}

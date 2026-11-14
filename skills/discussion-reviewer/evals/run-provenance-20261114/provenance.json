@@ -1,0 +1,12 @@
+{
+  "base_commit": "1ac6667b31979a1a2427cd15f083e85b6316f76b",
+  "runner": "fresh subagent /root/provenance_cases",
+  "reviewer": "separate fresh subagent /root/provenance_eval_review",
+  "specified_model": "gpt-6.1-sol",
+  "specified_reasoning": "medium",
+  "inherited_history": false,
+  "runner_expected_answers_withheld": true,
+  "execution": "one batched run of six synthetic textual cases; no live source actions",
+  "expectation_change": "P06 clarified after independent review; original expectations retained",
+  "cross_model_test": false
+}
