@@ -20,7 +20,7 @@ from connections import create_connection
 
 EVALUATION_PROMPT = """You are an AI assistant with access to tools.
 
-When given a task, you MUST:
+When given a task:
 1. Use the available tools to complete the task
 2. Provide summary of each step in your approach, wrapped in <summary> tags
 3. Provide feedback on the tools provided, wrapped in <feedback> tags
@@ -32,7 +32,7 @@ Summary Requirements:
   - Which tools you used, in what order, and why
   - The inputs you provided to each tool
   - The outputs you received from each tool
-  - A summary for how you arrived at the response
+  - One sentence naming which tool result the response is based on
 
 Feedback Requirements:
 - In your <feedback> tags, provide constructive feedback on the tools:
@@ -96,7 +96,7 @@ async def agent_loop(
     response = await asyncio.to_thread(
         client.messages.create,
         model=model,
-        max_tokens=4096,
+        max_tokens=16000,
         system=EVALUATION_PROMPT,
         messages=messages,
         tools=tools,
@@ -107,37 +107,44 @@ async def agent_loop(
     tool_metrics = {}
 
     while response.stop_reason == "tool_use":
-        tool_use = next(block for block in response.content if block.type == "tool_use")
-        tool_name = tool_use.name
-        tool_input = tool_use.input
+        # The model may issue several tool calls in one turn; every tool_use
+        # needs a matching tool_result in a single user message.
+        tool_results = []
+        for tool_use in (block for block in response.content if block.type == "tool_use"):
+            tool_name = tool_use.name
+            tool_input = tool_use.input
 
-        tool_start_ts = time.time()
-        try:
-            tool_result = await connection.call_tool(tool_name, tool_input)
-            tool_response = json.dumps(tool_result) if isinstance(tool_result, (dict, list)) else str(tool_result)
-        except Exception as e:
-            tool_response = f"Error executing tool {tool_name}: {str(e)}\n"
-            tool_response += traceback.format_exc()
-        tool_duration = time.time() - tool_start_ts
+            tool_start_ts = time.time()
+            is_error = False
+            try:
+                tool_result = await connection.call_tool(tool_name, tool_input)
+                tool_response = json.dumps(tool_result) if isinstance(tool_result, (dict, list)) else str(tool_result)
+            except Exception as e:
+                is_error = True
+                tool_response = f"Error executing tool {tool_name}: {str(e)}\n"
+                tool_response += traceback.format_exc()
+            tool_duration = time.time() - tool_start_ts
 
-        if tool_name not in tool_metrics:
-            tool_metrics[tool_name] = {"count": 0, "durations": []}
-        tool_metrics[tool_name]["count"] += 1
-        tool_metrics[tool_name]["durations"].append(tool_duration)
+            if tool_name not in tool_metrics:
+                tool_metrics[tool_name] = {"count": 0, "durations": []}
+            tool_metrics[tool_name]["count"] += 1
+            tool_metrics[tool_name]["durations"].append(tool_duration)
 
-        messages.append({
-            "role": "user",
-            "content": [{
+            result_block = {
                 "type": "tool_result",
                 "tool_use_id": tool_use.id,
                 "content": tool_response,
-            }]
-        })
+            }
+            if is_error:
+                result_block["is_error"] = True
+            tool_results.append(result_block)
+
+        messages.append({"role": "user", "content": tool_results})
 
         response = await asyncio.to_thread(
             client.messages.create,
             model=model,
-            max_tokens=4096,
+            max_tokens=16000,
             system=EVALUATION_PROMPT,
             messages=messages,
             tools=tools,
@@ -220,7 +227,7 @@ TASK_TEMPLATE = """
 async def run_evaluation(
     eval_path: Path,
     connection: Any,
-    model: str = "claude-3-7-sonnet-20250219",
+    model: str = "claude-opus-5-5",
 ) -> str:
     """Run evaluation with MCP server tools."""
     print("🚀 Starting Evaluation")
@@ -315,13 +322,13 @@ Examples:
   python evaluation.py -t sse -u https://example.com/mcp -H "Authorization: Bearer token" eval.xml
 
   # Evaluate an HTTP MCP server with custom model
-  python evaluation.py -t http -u https://example.com/mcp -m claude-3-5-sonnet-20241022 eval.xml
+  python evaluation.py -t http -u https://example.com/mcp -m claude-sonnet-5-5 eval.xml
         """,
     )
 
     parser.add_argument("eval_file", type=Path, help="Path to evaluation XML file")
     parser.add_argument("-t", "--transport", choices=["stdio", "sse", "http"], default="stdio", help="Transport type (default: stdio)")
-    parser.add_argument("-m", "--model", default="claude-3-7-sonnet-20250219", help="Claude model to use (default: claude-3-7-sonnet-20250219)")
+    parser.add_argument("-m", "--model", default="claude-opus-5-5", help="Claude model to use (default: claude-opus-5-5)")
 
     stdio_group = parser.add_argument_group("stdio options")
     stdio_group.add_argument("-c", "--command", help="Command to run MCP server (stdio only)")

@@ -25,7 +25,7 @@ description: 用關鍵字搜尋 NCBI/PubMed 上的生醫文獻，列出候選清
 
 ### 2. 用 PubMed 搜尋候選文獻
 
-呼叫 `mcp__PubMed__search_articles`：
+呼叫 PubMed 的 `search_articles` 工具（同樣用名稱結尾找，前綴依環境而定）：
 - `query`：把使用者的主題轉成 PubMed 語法。可以善用欄位標籤（`[Title]`、`[MeSH Terms]`、`[Publication Type]`）跟布林運算子讓查詢更精準，不要只丟一串自然語言關鍵字進去，除非主題本來就很單純。
 - `max_results`：預設抓 15 筆。使用者要更多/更少再調整。
 - `sort`：預設用 `relevance`；如果使用者的意圖明顯是「最近有什麼新的」，改用 `pub_date`。

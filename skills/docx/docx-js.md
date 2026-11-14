@@ -333,11 +333,10 @@ new Paragraph({
 - **Symbols:** `"2022"` (•), `"00A9"` (©), `"00AE"` (®), `"2122"` (™), `"00B0"` (°), `"F070"` (✓), `"F0FC"` (✗)
 
 ## Critical Issues & Common Mistakes
-- **CRITICAL: PageBreak must ALWAYS be inside a Paragraph** - standalone PageBreak creates invalid XML that Word cannot open
-- **ALWAYS use ShadingType.CLEAR for table cell shading** - Never use ShadingType.SOLID (causes black background).
+- Put PageBreak inside a Paragraph - a standalone PageBreak creates invalid XML that Word cannot open.
+- Use ShadingType.CLEAR for table cell shading - ShadingType.SOLID renders a black background.
 - Measurements in DXA (1440 = 1 inch) | Each table cell needs ≥1 Paragraph | TOC requires HeadingLevel styles only
-- **ALWAYS use custom styles** with Arial font for professional appearance and proper visual hierarchy
-- **ALWAYS set a default font** using `styles.default.document.run.font` - Arial recommended
+- Use custom styles for a clear visual hierarchy, and set a default font with `styles.default.document.run.font`. Arial is a safe Latin default; choose fonts that fit the document's purpose, its language (CJK text needs a CJK-capable font) and any template the user supplies.
 - **ALWAYS use columnWidths array for tables** + individual cell widths for compatibility
 - **NEVER use unicode symbols for bullets** - always use proper numbering configuration with `LevelFormat.BULLET` constant (NOT the string "bullet")
 - **NEVER use \n for line breaks anywhere** - always use separate Paragraph elements for each line

@@ -53,7 +53,7 @@ uvx --with "yt-dlp[curl-cffi]" yt-dlp \
 
 Windows PowerShell 範例：
 ```powershell
-uvx --with "yt-dlp[curl-cffi]" yt-dlp --impersonate chrome --ffmpeg-location "C:\Users\User\Downloads\ffmpeg\ffmpeg-2026-01-12-git-21a3e44fbe-full_build\bin" -f "bestvideo*+bestaudio/best" -o "I:\downloads\%(title)s.%(ext)s" "<VIDEO_URL>"
+uvx --with "yt-dlp[curl-cffi]" yt-dlp --impersonate chrome --ffmpeg-location "<FFMPEG_BIN_DIR>" -f "bestvideo*+bestaudio/best" -o "<OUTPUT_DIR>\%(title)s.%(ext)s" "<VIDEO_URL>"
 ```
 
 ### 4. 編碼與命名防護（Windows 規範）

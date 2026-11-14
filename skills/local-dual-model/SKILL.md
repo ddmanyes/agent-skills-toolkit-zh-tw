@@ -22,12 +22,12 @@ description: 調用實驗室 Tailscale 私網雙模型伺服器 (100.109.10.60:8
 
 ---
 
-## 二、安全性與金鑰管理 (Zero-Leakage Guarantee)
+## 二、安全性與金鑰管理
 
 - **防 Push 外流機制**：本 Skill 的任何文件與腳本**完全不包含明文金鑰**。
 - **儲存位置**：金鑰儲存於本機 Windows 使用者登錄表環境變數：
   `HKCU\Environment\LOCAL_LLM_KEY`
-- **動態解析**：腳本執行時自動經由 `os.environ.get("LOCAL_LLM_KEY")` 或直接向 Windows Registry 查詢，即使提交與推播（Push）程式庫至公開 GitHub 也絕無外洩風險。
+- **動態解析**：腳本執行時自動經由 `os.environ.get("LOCAL_LLM_KEY")` 或直接向 Windows Registry 查詢；金鑰不寫進 repo，修改腳本時也不要加入明文金鑰。
 
 ---
 
@@ -117,7 +117,7 @@ relation = decide_choice("判斷關聯性", options=["支持", "矛盾", "無關
    - **會觸發推論的請求，客戶端 Timeout 一律保持在 60 秒以上**，切勿在 15 秒內重送或判定斷線。`call_model.py` 設定：System 1 為 60 秒、`chat` 為 120 秒；`GET /v1/models`（`--status`）不載入模型，設 30 秒。
    - 每次呼叫 Gemma 4 都會把 Clef 擠出顯存，伺服器若有他人同時使用 System 1，請避免頻繁穿插 `--chat`。
    - System 1 的延遲隨輸入長度增加，約每 1000 個輸入 tokens 多 4.5 秒（短請求約 1 秒、約 2200 tokens 約 10 秒），大批判定時要把這點算進總時間。
-   - System 1 輸入上限是 Clef 的 ctx 4096 tokens。若回 HTTP 500 `input (N tokens) is too large to process. increase the physical batch size`，代表伺服器 `models.ini` 的 `[clef]` 區段 `batch-size`／`ubatch-size` 小於輸入長度（2026-10-27 前未設定，預設 ubatch 512；已改為 4096）。
+   - System 1 輸入上限是 Clef 的 ctx 4096 tokens。若回 HTTP 500 `input (N tokens) is too large to process. increase the physical batch size`，代表伺服器 `models.ini` 的 `[clef]` 區段 `batch-size`／`ubatch-size` 小於輸入長度（目前設定為 4096）。
 3. **回覆截斷**：
    - `max_tokens` 用完時伺服器回 `finish_reason: "length"`，內容會在句中斷掉。`chat()` 會發出 `UserWarning` 提示；長文請調高 `max_tokens`（`--max-tokens`）。
    - 實測（2026-10-27）此 Gemma 4 設定不回 `reasoning_content`，推理文字直接放在 `content`，不會出現 content 為空的情況。
