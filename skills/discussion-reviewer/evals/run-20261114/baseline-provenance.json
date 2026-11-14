@@ -1,0 +1,15 @@
+{
+  "baseline_commit": "d4054d48a93b5f6ff46f0f105acbbce7cb0af72e",
+  "execution": "one batched subagent forward run with skill, expected answers withheld",
+  "requested_model": "gpt-6.1-sol",
+  "requested_reasoning": "medium",
+  "reviewer": "separate fresh-context subagent; requested same model; not external peer review",
+  "files": {
+    "SKILL.md": "aa948be5a4af781638ebfe6c4282f656097c605d8a6b6b19a48adb78fd9215f7",
+    "evals/cases.json": "353420835dddc0623c7546e45d1a573ebe7b4dd6e28d8c60cc6e9ac67c915741",
+    "references/review-record.md": "f286a24c28f36492b351e0de9f7aa9609f245cf1017f833587b1a6963032b75d",
+    "references/verification.md": "19e34a873b660d6aa7118b663a8fccd74cc7d6d255b16f0d515d3f2556706420",
+    "references/rubric.md": "4aea76c9259870a50c17f9a7431134d2aeefdc67ba0251151c35b24ebbba20b8",
+    "agents/openai.yaml": "753d036b5f94ccf9d045d702fae9aa97d4078e55726a5bd91267f277f4477783"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "requested_model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "execution": "fresh-context batched forward run of 24, then 2 supplemental in same session; expected answers withheld",
+  "review": "separate fresh-context reviewer, no authorship; same requested model",
+  "core_pass": 26,
+  "core_total": 26,
+  "clean_text_controls": 8,
+  "false_positive_controls": 0,
+  "scope_control": 1,
+  "files": {
+    "SKILL.md": "34f574cc04dcc12db2f6bbfd8d191e6cfaf5fec7af35983e425ac01d73b87c7f",
+    "references/review-record.md": "f286a24c28f36492b351e0de9f7aa9609f245cf1017f833587b1a6963032b75d",
+    "references/rubric.md": "2fa6a712a8eacd0be02c866beb37572a85b3a1beb53ba7949404a86b34e97394",
+    "references/verification.md": "34bcd6ba08f8f85ecfaf9159d5c6935e07f6299bee38eee3ccd83c99181c11a7"
+  }
+}
